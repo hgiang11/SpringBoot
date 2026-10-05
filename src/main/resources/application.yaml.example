@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/chickenshop?useSSL=false&serverTimezone=Asia/Ho_Chi_Minh&characterEncoding=UTF-8
+    username: root
+    password: adidaphat
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  thymeleaf:
+    cache: false

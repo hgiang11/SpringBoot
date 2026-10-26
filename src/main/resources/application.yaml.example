@@ -11,3 +11,7 @@ spring:
 
   thymeleaf:
     cache: false
+
+
+    # Ảnh admin upload khi chạy thử
+    uploads/

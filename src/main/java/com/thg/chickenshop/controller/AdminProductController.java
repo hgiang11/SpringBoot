@@ -1,6 +1,8 @@
 package com.thg.chickenshop.controller;
 
 import com.thg.chickenshop.dto.ProductForm;
+import com.thg.chickenshop.exception.BusinessException;
+import com.thg.chickenshop.model.Product;
 import com.thg.chickenshop.service.CategoryService;
 import com.thg.chickenshop.service.ProductService;
 import jakarta.validation.Valid;
@@ -54,15 +56,28 @@ public class AdminProductController {
                        Model model,
                        RedirectAttributes redirectAttributes) {
 
-        if (result.hasErrors()) {   // có lỗi: trả lại form, KHÔNG redirect
-            model.addAttribute("categories", categoryService.findAll());
-            model.addAttribute("formTitle",
-                    form.getId() == null ? "Thêm món mới" : "Sửa món ăn");
-            return "admin/product-form";
+        if (!result.hasErrors()) {
+            try {
+                productService.save(form);
+                redirectAttributes.addFlashAttribute("message", "Đã lưu món ăn thành công");
+                return "redirect:/admin/products";
+            } catch (BusinessException ex) {
+                // lỗi nghiệp vụ (vd ảnh sai định dạng): gắn vào ô ảnh để hiện ngay trên form
+                result.rejectValue("image", "upload.invalid", ex.getMessage());
+            }
         }
 
-        productService.save(form);
-        redirectAttributes.addFlashAttribute("message", "Đã lưu món ăn thành công");
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("formTitle",
+                form.getId() == null ? "Thêm món mới" : "Sửa món ăn");
+        return "admin/product-form";
+    }
+
+    @PostMapping("/{id}/toggle")
+    public String toggle(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Product p = productService.toggleAvailable(id);
+        redirectAttributes.addFlashAttribute("message",
+                (p.isAvailable() ? "Đã hiện món: " : "Đã ẩn món: ") + p.getName());
         return "redirect:/admin/products";
     }
 }

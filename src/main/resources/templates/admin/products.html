@@ -51,8 +51,12 @@
                 <span th:if="${p.available}" class="badge on">Đang bán</span>
                 <span th:unless="${p.available}" class="badge off">Đã ẩn</span>
             </td>
-            <td>
+            <td class="actions">
                 <a th:href="@{/admin/products/{id}/edit(id=${p.id})}" class="btn btn-small">Sửa</a>
+                <form th:action="@{/admin/products/{id}/toggle(id=${p.id})}" method="post" class="inline-form">
+                    <button type="submit" class="btn btn-small"
+                            th:text="${p.available} ? 'Ẩn' : 'Hiện'">Ẩn</button>
+                </form>
             </td>
         </tr>
         <tr th:if="${products.empty}">

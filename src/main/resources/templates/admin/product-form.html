@@ -20,7 +20,7 @@
     <h1 th:text="${formTitle}">Thêm món mới</h1>
 
     <form th:action="@{/admin/products/save}" th:object="${productForm}"
-          method="post" class="admin-form">
+          method="post" enctype="multipart/form-data" class="admin-form">
 
         <input type="hidden" th:field="*{id}">
 
@@ -52,7 +52,13 @@
         </div>
 
         <div class="field">
-            <label for="imageUrl">Đường dẫn ảnh</label>
+            <label for="image">Ảnh món (JPG, PNG, WEBP, tối đa 5MB)</label>
+            <input type="file" id="image" name="image" accept="image/png,image/jpeg,image/webp">
+            <span class="error" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
+        </div>
+
+        <div class="field">
+            <label for="imageUrl">Hoặc nhập đường dẫn ảnh</label>
             <input type="text" id="imageUrl" th:field="*{imageUrl}" placeholder="/images/ga-1-mieng.jpg">
         </div>
 

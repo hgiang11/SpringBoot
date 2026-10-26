@@ -37,3 +37,5 @@ body { margin: 0; font-family: Arial, sans-serif; background: #f6f3ee; color: #2
 .error { color: #c0182f; font-size: .85rem; display: block; margin-top: 3px; }
 .field-check { margin-bottom: 16px; }
 .form-actions { display: flex; gap: 10px; }
+.inline-form { display: inline; }
+.actions { white-space: nowrap; }

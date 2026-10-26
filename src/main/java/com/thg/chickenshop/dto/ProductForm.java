@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;   // MỚI
 
 import java.math.BigDecimal;
 
@@ -26,6 +27,7 @@ public class ProductForm {
     private BigDecimal price;
 
     private String imageUrl;
+    private MultipartFile image;   // MỚI: file ảnh người dùng chọn (có thể để trống)
 
     @NotNull(message = "Vui lòng chọn danh mục")
     private Long categoryId;

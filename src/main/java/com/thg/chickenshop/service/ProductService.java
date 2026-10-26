@@ -15,22 +15,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryService categoryService;     // MỚI
+    private final CategoryService categoryService;
+    private final FileStorageService fileStorageService;       // MỚI
 
     public ProductService(ProductRepository productRepository,
-                          CategoryService categoryService) {   // MỚI: thêm tham số
+                          CategoryService categoryService,
+                          FileStorageService fileStorageService) {   // MỚI
         this.productRepository = productRepository;
         this.categoryService = categoryService;
+        this.fileStorageService = fileStorageService;
     }
 
-    // ===== Dành cho khách (Phần A) - GIỮ NGUYÊN =====
+    // ===== Dành cho khách =====
     public Page<Product> search(String keyword, Long categoryId, int page, int size) {
         String kw = (keyword == null) ? "" : keyword.trim();
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
         return productRepository.search(categoryId, kw, pageable);
     }
 
-    // ===== Dành cho admin (Phần B1) - MỚI =====
+    // ===== Dành cho admin =====
     public Page<Product> findAllForAdmin(String keyword, int page, int size) {
         String kw = (keyword == null) ? "" : keyword.trim();
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
@@ -62,9 +65,20 @@ public class ProductService {
         p.setName(form.getName().trim());
         p.setDescription(form.getDescription());
         p.setPrice(form.getPrice());
-        p.setImageUrl(form.getImageUrl());
         p.setAvailable(form.isAvailable());
         p.setCategory(categoryService.findById(form.getCategoryId()));
+
+        // Có chọn file thì dùng ảnh mới, không thì giữ đường dẫn ở ô nhập chữ
+        String uploaded = fileStorageService.store(form.getImage());
+        p.setImageUrl(uploaded != null ? uploaded : form.getImageUrl());
+
         return productRepository.save(p);
+    }
+
+    @Transactional
+    public Product toggleAvailable(Long id) {      // MỚI
+        Product p = findById(id);
+        p.setAvailable(!p.isAvailable());
+        return p;      // không cần gọi save: Hibernate tự lưu thay đổi khi kết thúc giao dịch
     }
 }

@@ -1,7 +1,10 @@
 package com.thg.chickenshop.controller;
 
 import com.thg.chickenshop.model.Product;
+import com.thg.chickenshop.model.User;
+import com.thg.chickenshop.service.CartService;
 import com.thg.chickenshop.service.CategoryService;
+import com.thg.chickenshop.service.CurrentUserService;
 import com.thg.chickenshop.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -16,11 +19,17 @@ public class ProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final CartService cartService;
+    private final CurrentUserService currentUserService;
 
     public ProductController(ProductService productService,
-                             CategoryService categoryService) {
+                             CategoryService categoryService,
+                             CartService cartService,
+                             CurrentUserService currentUserService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.cartService = cartService;
+        this.currentUserService = currentUserService;
     }
 
     @GetMapping("/menu")
@@ -30,11 +39,15 @@ public class ProductController {
                        Model model) {
 
         Page<Product> products = productService.search(q, category, page, PAGE_SIZE);
+        User user = currentUserService.getCurrentUser();
 
         model.addAttribute("products", products);
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("q", q);
         model.addAttribute("selectedCategory", category);
-        return "menu";   // trả về file templates/menu.html
+        model.addAttribute("cartCount", cartService.countItems(user));
+        model.addAttribute("cartTotal", cartService.getTotal(user));
+        model.addAttribute("active", "menu");
+        return "menu";
     }
 }

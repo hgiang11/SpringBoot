@@ -247,3 +247,10 @@
         grid-template-columns: 1fr;
     }
 }
+
+
+.toast { max-width: 1200px; margin: 0 auto 15px; padding: 10px 16px; border-radius: 8px;
+    background: #e6f6ea; color: #1d6b32; font-weight: 600; }
+.toast-error { background: #fdeaea; color: #a01818; }
+a.floating-cart { text-decoration: none; }
+.product-info form { margin: 0; }

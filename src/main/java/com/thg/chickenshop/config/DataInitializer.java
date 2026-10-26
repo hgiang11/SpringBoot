@@ -2,8 +2,11 @@ package com.thg.chickenshop.config;
 
 import com.thg.chickenshop.model.Category;
 import com.thg.chickenshop.model.Product;
+import com.thg.chickenshop.model.Role;
+import com.thg.chickenshop.model.User;
 import com.thg.chickenshop.repository.CategoryRepository;
 import com.thg.chickenshop.repository.ProductRepository;
+import com.thg.chickenshop.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
@@ -13,15 +16,34 @@ public class DataInitializer implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
-
+    private final UserRepository userRepository;
     public DataInitializer(CategoryRepository categoryRepository,
-                           ProductRepository productRepository) {
+                           ProductRepository productRepository,
+                           UserRepository userRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void run(String... args) {
+        seedTempCustomer();
+        seedMenu();
+    }
+
+    private void seedTempCustomer() {
+        if (userRepository.existsByUsername("customer1")) return;
+
+        User u = new User();
+        u.setUsername("customer1");
+        u.setPassword("temp-password");     // TẠM: Ngày 5 thay bằng mật khẩu mã hóa BCrypt
+        u.setFullName("Khách hàng mẫu");
+        u.setPhone("0900000000");
+        u.setAddress("123 Đường ABC");
+        u.setRole(Role.CUSTOMER);
+        userRepository.save(u);
+    }
+    public void seedMenu(String... args) {
         if (categoryRepository.count() > 0) return;
 
         Category chicken = categoryRepository.save(new Category("Gà rán"));

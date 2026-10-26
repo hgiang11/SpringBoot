@@ -92,6 +92,8 @@
 
 <!-- 4. DANH SÁCH SẢN PHẨM (lấy từ database) -->
 <main class="products-section container">
+    <div class="toast" th:if="${message}" th:text="${message}"></div>
+    <div class="toast toast-error" th:if="${error}" th:text="${error}"></div>
     <div class="product-grid">
         <div class="product-card" th:each="p : ${products.content}">
             <div class="product-img">
@@ -103,8 +105,13 @@
                 <p class="product-desc" th:text="${p.description}">Mô tả món ăn...</p>
                 <div class="product-price"
                      th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">80,000 ₫</div>
-                <button type="button" class="btn-order" th:attr="data-product-id=${p.id}">ĐẶT HÀNG</button>
-            </div>
+                <form th:action="@{/cart/add}" method="post">
+                    <input type="hidden" name="productId" th:value="${p.id}">
+                    <input type="hidden" name="q" th:value="${q}">
+                    <input type="hidden" name="category" th:value="${selectedCategory}">
+                    <input type="hidden" name="page" th:value="${products.number}">
+                    <button type="submit" class="btn-order">THÊM VÀO GIỎ</button>
+                </form>            </div>
         </div>
     </div>
 
@@ -125,10 +132,11 @@
 </main>
 
 <!-- Giỏ hàng nổi -->
-<div class="floating-cart">
+<a th:href="@{/cart}" class="floating-cart">
     <span>🛒</span>
-    <span>0 ₫</span>
-</div>
+    <span th:text="${cartCount}">0</span>
+    <span th:text="${#numbers.formatDecimal(cartTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</span>
+</a>
 
 <!-- 5. FOOTER -->
 <footer class="jollibee-footer">

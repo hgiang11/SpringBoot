@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSRF token (chỉ xuất hiện khi dự án có Spring Security) -->
+    <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:if="${_csrf != null}" th:content="${_csrf.headerName}">
+    <title>Giỏ hàng - Chicken Shop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+</head>
+<body class="jollibee-bg">
+
+<!-- 1. HEADER (Dùng lại phần Header chuẩn) -->
+<header class="jollibee-header">
+    <div class="top-bar">
+        <div class="top-bar-wave"></div>
+        <div class="top-bar-container">
+            <div class="top-bar-right">
+                <div class="lang-switch">
+                    <a href="?lang=vi" class="lang-item active"><img src="https://flagcdn.com/w20/vn.png" class="flag-icon"> <span>VN</span></a>
+                    <span class="divider">|</span>
+                    <a href="?lang=en" class="lang-item"><img src="https://flagcdn.com/w20/gb.png" class="flag-icon"> <span>EN</span></a>
+                </div>
+                <a href="#" class="btn-account">
+                    <svg class="user-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <span>ĐĂNG KÝ / ĐĂNG NHẬP</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="main-header">
+        <div class="header-container">
+            <a th:href="@{/}" class="brand-logo"><img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee"></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a th:href="@{/}" class="active">TRANG CHỦ</a></li>
+                    <li><a th:href="@{/jollibee}"
+                           th:classappend="${active == 'jollibee'} ? 'active'">VỀ JOLLIBEE</a></li>
+                    <li><a th:href="@{/menu}">THỰC ĐƠN</a></li>
+                    <li><a href="#">KHUYẾN MÃI</a></li>
+                    <li><a href="#">DỊCH VỤ</a></li>
+                    <li><a href="#">TIN TỨC</a></li>
+                    <li><a href="#">CỬA HÀNG</a></li>
+                    <li><a href="#">LIÊN HỆ</a></li>
+                    <li><a href="#">TUYỂN DỤNG</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<main class="cart-main">
+    <h1>Giỏ hàng của bạn</h1>
+
+    <!-- Nơi hiện thông báo (cả của server lẫn của AJAX) -->
+    <div id="toast-area">
+        <div class="toast" th:if="${message}" th:text="${message}"></div>
+        <div class="toast toast-error" th:if="${error}" th:text="${error}"></div>
+    </div>
+
+    <!-- Giỏ trống -->
+    <div class="cart-empty" th:if="${#lists.isEmpty(cart.items)}">
+        <p>Giỏ hàng của bạn đang trống.</p>
+        <a th:href="@{/menu}" class="btn-continue">Xem thực đơn</a>
+    </div>
+
+    <!-- Giỏ có món -->
+    <div th:unless="${#lists.isEmpty(cart.items)}">
+        <table class="cart-table">
+            <thead>
+            <tr>
+                <th>Món</th>
+                <th>Đơn giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="cart-body">
+            <tr th:each="item : ${cart.items}" th:id="'row-' + ${item.id}">
+                <td>
+                    <strong th:text="${item.product.name}">Tên món</strong>
+                    <span class="unavailable" th:unless="${item.product.available}">Món đã ngừng bán</span>
+                </td>
+                <td th:text="${#numbers.formatDecimal(item.product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">35.000 ₫</td>
+                <td>
+                    <!-- Đổi số lượng là tự cập nhật, không cần nút "Cập nhật" -->
+                    <div class="qty-form">
+                        <input type="number" class="qty-input" min="1" max="20"
+                               th:value="${item.quantity}"
+                               th:attr="data-id=${item.id}, data-prev=${item.quantity}">
+                    </div>
+                </td>
+                <td th:id="'sub-' + ${item.id}"
+                    th:text="${#numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">70.000 ₫</td>
+                <td>
+                    <button type="button" class="btn-small btn-remove"
+                            th:attr="data-id=${item.id}">Xóa</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <div class="cart-total">
+                Tổng cộng:
+                <strong id="cart-total"
+                        th:text="${#numbers.formatDecimal(cart.total, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</strong>
+            </div>
+            <div class="cart-actions">
+                <a th:href="@{/menu}" class="btn-continue">Tiếp tục chọn món</a>
+                <!-- Ngày 4: đổi thành liên kết tới /checkout -->
+                <button type="button" class="btn-checkout" disabled>Thanh toán (sắp có)</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script th:inline="javascript">
+    (function () {
+        const baseUrl = /*[[@{/cart/api/items}]]*/ '/cart/api/items';
+
+        // CSRF (nếu có Spring Security)
+        const csrfToken  = document.querySelector('meta[name="_csrf"]')?.content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content;
+
+        const fmt = n => Number(n).toLocaleString('vi-VN') + ' ₫';
+
+        function showToast(text, isError) {
+            const area = document.getElementById('toast-area');
+            area.innerHTML = '';
+            const div = document.createElement('div');
+            div.className = 'toast' + (isError ? ' toast-error' : '');
+            div.textContent = text;
+            area.appendChild(div);
+            setTimeout(() => div.remove(), 2500);
+        }
+
+        async function post(url, params) {
+            const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+            if (csrfToken && csrfHeader) headers[csrfHeader] = csrfToken;
+            const res = await fetch(url, { method: 'POST', headers, body: new URLSearchParams(params) });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || 'Có lỗi xảy ra, vui lòng thử lại');
+            return data;
+        }
+
+        // ----- Đổi số lượng: tự cập nhật thành tiền + tổng cộng -----
+        let timers = {};
+        document.querySelectorAll('.qty-input').forEach(input => {
+            input.addEventListener('input', () => {
+                const id = input.dataset.id;
+                clearTimeout(timers[id]);              // chờ 0,4s sau khi ngừng gõ rồi mới gửi
+                timers[id] = setTimeout(() => updateQty(input), 400);
+            });
+        });
+
+        async function updateQty(input) {
+            const id = input.dataset.id;
+            const qty = parseInt(input.value, 10);
+            if (isNaN(qty) || qty < 1 || qty > 20) {
+                showToast('Số lượng phải từ 1 đến 20', true);
+                input.value = input.dataset.prev;
+                return;
+            }
+            try {
+                const data = await post(baseUrl + '/' + id + '/update', { quantity: qty });
+                input.dataset.prev = qty;
+                document.getElementById('sub-' + id).textContent = fmt(data.subtotal);
+                document.getElementById('cart-total').textContent = fmt(data.total);
+            } catch (e) {
+                input.value = input.dataset.prev;      // lỗi thì trả về số cũ
+                showToast(e.message, true);
+            }
+        }
+
+        // ----- Xóa món: dòng biến mất, tổng tiền tự tính lại -----
+        document.querySelectorAll('.btn-remove').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.dataset.id;
+                try {
+                    const data = await post(baseUrl + '/' + id + '/remove', {});
+                    document.getElementById('row-' + id).remove();
+                    document.getElementById('cart-total').textContent = fmt(data.total);
+                    if (document.querySelectorAll('#cart-body tr').length === 0) {
+                        location.reload();             // giỏ trống: tải lại để hiện màn hình "giỏ trống"
+                    } else {
+                        showToast('Đã xóa món khỏi giỏ hàng', false);
+                    }
+                } catch (e) {
+                    showToast(e.message, true);
+                }
+            });
+        });
+    })();
+</script>
+
+</body>
+</html>

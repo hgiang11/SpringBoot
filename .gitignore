@@ -38,3 +38,6 @@ out/
 
 # Không đưa file chứa mật khẩu lên GitHub
 src/main/resources/application.yaml
+
+# Ảnh admin upload khi chạy thử
+uploads/

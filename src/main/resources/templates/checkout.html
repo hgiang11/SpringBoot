@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác nhận đơn hàng - Chicken Shop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" th:href="@{/css/order.css}">
+</head>
+<body class="jollibee-bg">
+
+<!-- DÁN KHỐI <header class="jollibee-header"> ... </header> TỪ menu.html VÀO ĐÂY -->
+
+<main class="cart-main">
+    <h1>Xác nhận đơn hàng</h1>
+
+    <div class="checkout-grid">
+
+        <form th:action="@{/orders}" th:object="${checkoutForm}" method="post" class="checkout-form">
+            <h2>Thông tin giao hàng</h2>
+
+            <div class="field">
+                <label for="deliveryAddress">Địa chỉ giao hàng *</label>
+                <input type="text" id="deliveryAddress" th:field="*{deliveryAddress}">
+                <span class="error" th:if="${#fields.hasErrors('deliveryAddress')}"
+                      th:errors="*{deliveryAddress}"></span>
+            </div>
+
+            <div class="field">
+                <label for="phone">Số điện thoại *</label>
+                <input type="text" id="phone" th:field="*{phone}">
+                <span class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+            </div>
+
+            <p class="pay-note">Hình thức thanh toán: <strong>Thanh toán khi nhận hàng (COD)</strong></p>
+
+            <div class="cart-actions">
+                <a th:href="@{/cart}" class="btn-continue">Quay lại giỏ hàng</a>
+                <button type="submit" class="btn-checkout">ĐẶT HÀNG</button>
+            </div>
+        </form>
+
+        <aside class="order-summary">
+            <h2>Đơn của bạn</h2>
+            <ul>
+                <li th:each="item : ${cart.items}">
+                    <span th:text="${item.quantity} + ' x ' + ${item.product.name}">2 x Gà rán</span>
+                    <span th:text="${#numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">70.000 ₫</span>
+                </li>
+            </ul>
+            <div class="summary-total">
+                Tổng cộng:
+                <strong th:text="${#numbers.formatDecimal(cart.total, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</strong>
+            </div>
+        </aside>
+
+    </div>
+</main>
+
+</body>
+</html>

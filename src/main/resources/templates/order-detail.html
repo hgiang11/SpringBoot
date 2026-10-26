@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng - Chicken Shop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" th:href="@{/css/order.css}">
+</head>
+<body class="jollibee-bg">
+
+<header class="jollibee-header">
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <div class="lang-switch">
+                <span class="lang-item active"><img src="https://flagcdn.com/w20/vn.png" alt="VN" class="flag-icon"> VN</span>
+                <span style="opacity: 0.4;">|</span>
+                <span class="lang-item"><img src="https://flagcdn.com/w20/gb.png" alt="EN" class="flag-icon"> EN</span>
+            </div>
+            <a href="#" class="btn-account">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                </svg>
+                <span>ĐĂNG KÝ / ĐĂNG NHẬP</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="main-header">
+        <div class="header-container">
+            <a href="#" class="brand-logo">
+                <img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee Vietnam"
+                     onerror="this.src='https://via.placeholder.com/120x50/E31837/FFFFFF?text=Jollibee'">
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a th:href="@{/home}">TRANG CHỦ</a></li>
+                    <li><a th:href="@{/jollibee}" th:classappend="${active == 'jollibee'} ? 'active'">VỀ JOLLIBEE</a></li>
+                    <li><a th:href="@{/menu}">THỰC ĐƠN</a></li>
+                    <li><a href="#">KHUYẾN MÃI</a></li>
+                    <li><a href="#">DỊCH VỤ</a></li>
+                    <li><a href="#">TIN TỨC</a></li>
+                    <li><a href="#">CỬA HÀNG</a></li>
+                    <li><a href="#">LIÊN HỆ</a></li>
+                    <li><a href="#">TUYỂN DỤNG</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<main class="cart-main">
+    <h1>Đơn hàng <span th:text="'#' + ${order.id}">#1</span></h1>
+
+    <div class="toast" th:if="${message}" th:text="${message}"></div>
+    <div class="toast toast-error" th:if="${error}" th:text="${error}"></div>
+
+    <div class="info-box">
+        <p><strong>Trạng thái:</strong>
+            <span class="status" th:classappend="'status-' + ${order.status}"
+                  th:text="${order.status.label}">Chờ xác nhận</span></p>
+        <p><strong>Ngày đặt:</strong>
+            <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2026</span></p>
+        <p><strong>Địa chỉ giao hàng:</strong> <span th:text="${order.deliveryAddress}">...</span></p>
+        <p><strong>Số điện thoại:</strong> <span th:text="${order.phone}">...</span></p>
+    </div>
+
+    <table class="cart-table">
+        <thead>
+        <tr><th>Món</th><th>Đơn giá lúc đặt</th><th>Số lượng</th><th>Thành tiền</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${order.items}">
+            <td th:text="${item.product.name}">Tên món</td>
+            <td th:text="${#numbers.formatDecimal(item.priceAtOrder, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</td>
+            <td th:text="${item.quantity}">1</td>
+            <td th:text="${#numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="cart-summary">
+        <div class="cart-total">
+            Tổng cộng:
+            <strong th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</strong>
+        </div>
+        <div class="cart-actions">
+            <a th:href="@{/orders}" class="btn-continue">Về danh sách đơn</a>
+            <form th:if="${order.status.name() == 'PENDING'}"
+                  th:action="@{/orders/{id}/cancel(id=${order.id})}" method="post"
+                  onsubmit="return confirm('Bạn chắc chắn muốn hủy đơn này?');">
+                <button type="submit" class="btn-small btn-remove">Hủy đơn</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chi tiết đơn - Chicken Shop</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/order.css}">
+</head>
+<body>
+
+<header class="admin-bar">
+    <a th:href="@{/admin/products}" class="admin-logo">🍗 Chicken Shop · Quản trị</a>
+    <nav>
+        <a th:href="@{/admin/products}">Món ăn</a>
+        <a th:href="@{/admin/categories}">Danh mục</a>
+        <a th:href="@{/admin/orders}">Đơn hàng</a>
+        <a th:href="@{/menu}">Xem trang khách</a>
+    </nav>
+</header>
+
+<main class="admin-main">
+    <h1>Đơn hàng <span th:text="'#' + ${order.id}">#1</span></h1>
+
+    <p class="alert" th:if="${message}" th:text="${message}"></p>
+    <p class="alert alert-error" th:if="${error}" th:text="${error}"></p>
+
+    <div class="info-box">
+        <p><strong>Khách hàng:</strong> <span th:text="${order.user.fullName}">Khách</span></p>
+        <p><strong>Số điện thoại:</strong> <span th:text="${order.phone}">...</span></p>
+        <p><strong>Địa chỉ giao hàng:</strong> <span th:text="${order.deliveryAddress}">...</span></p>
+        <p><strong>Ngày đặt:</strong>
+            <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2026</span></p>
+        <p><strong>Trạng thái hiện tại:</strong>
+            <span class="status" th:classappend="'status-' + ${order.status}"
+                  th:text="${order.status.label}">Chờ xác nhận</span></p>
+
+        <!-- Chỉ hiện các nút chuyển trạng thái được phép -->
+        <div class="status-actions" th:unless="${#lists.isEmpty(order.status.nextStatuses())}">
+            <form th:each="next : ${order.status.nextStatuses()}"
+                  th:action="@{/admin/orders/{id}/status(id=${order.id})}" method="post">
+                <input type="hidden" name="status" th:value="${next}">
+                <button type="submit" class="btn btn-small"
+                        th:classappend="${next.name() == 'CANCELLED'} ? '' : 'btn-primary'"
+                        th:text="'Chuyển sang: ' + ${next.label}">Chuyển</button>
+            </form>
+        </div>
+        <p th:if="${#lists.isEmpty(order.status.nextStatuses())}">Đơn đã ở trạng thái cuối.</p>
+    </div>
+
+    <table class="admin-table" style="margin-top:16px;">
+        <thead>
+        <tr><th>Món</th><th>Đơn giá lúc đặt</th><th>Số lượng</th><th>Thành tiền</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${order.items}">
+            <td th:text="${item.product.name}">Tên món</td>
+            <td th:text="${#numbers.formatDecimal(item.priceAtOrder, 0, 'POINT', 0, 'COMMA')} + ' đ'">0 đ</td>
+            <td th:text="${item.quantity}">1</td>
+            <td th:text="${#numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')} + ' đ'">0 đ</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p style="text-align:right; font-size:1.1rem; margin-top:12px;">
+        Tổng cộng: <strong th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'POINT', 0, 'COMMA')} + ' đ'">0 đ</strong>
+    </p>
+
+    <a th:href="@{/admin/orders}" class="btn">← Về danh sách đơn</a>
+</main>
+</body>
+</html>

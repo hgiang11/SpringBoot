@@ -33,4 +33,8 @@ public class OrderItem {
         this.quantity = quantity;
         this.priceAtOrder = priceAtOrder;
     }
+
+    public BigDecimal getSubtotal() {
+        return priceAtOrder.multiply(BigDecimal.valueOf(quantity));
+    }
 }

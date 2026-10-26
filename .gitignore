@@ -41,3 +41,6 @@ src/main/resources/application.yaml
 
 # Ảnh admin upload khi chạy thử
 uploads/
+
+hs_err_pid*.log
+replay_pid*.log

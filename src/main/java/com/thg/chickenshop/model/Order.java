@@ -33,6 +33,7 @@ public class Order {
     private BigDecimal totalPrice = BigDecimal.ZERO;
 
     private String deliveryAddress;
+    private String phone;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();

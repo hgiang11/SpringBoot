@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${formTitle} + ' - Chicken Shop'">Form món</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<header class="admin-bar">
+    <a th:href="@{/admin/products}" class="admin-logo">🍗 Chicken Shop · Quản trị</a>
+    <nav>
+        <a th:href="@{/admin/products}">Món ăn</a>
+        <a th:href="@{/menu}">Xem trang khách</a>
+    </nav>
+</header>
+
+<main class="admin-main">
+    <h1 th:text="${formTitle}">Thêm món mới</h1>
+
+    <form th:action="@{/admin/products/save}" th:object="${productForm}"
+          method="post" class="admin-form">
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="field">
+            <label for="name">Tên món *</label>
+            <input type="text" id="name" th:field="*{name}">
+            <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </div>
+
+        <div class="field">
+            <label for="categoryId">Danh mục *</label>
+            <select id="categoryId" th:field="*{categoryId}">
+                <option value="">-- Chọn danh mục --</option>
+                <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></span>
+        </div>
+
+        <div class="field">
+            <label for="price">Giá (đồng) *</label>
+            <input type="number" id="price" th:field="*{price}" min="0" step="1000">
+            <span class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+        </div>
+
+        <div class="field">
+            <label for="description">Mô tả</label>
+            <textarea id="description" th:field="*{description}" rows="4"></textarea>
+            <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+        </div>
+
+        <div class="field">
+            <label for="imageUrl">Đường dẫn ảnh</label>
+            <input type="text" id="imageUrl" th:field="*{imageUrl}" placeholder="/images/ga-1-mieng.jpg">
+        </div>
+
+        <div class="field-check">
+            <input type="checkbox" id="available" th:field="*{available}">
+            <label for="available">Đang bán</label>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a th:href="@{/admin/products}" class="btn">Hủy</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

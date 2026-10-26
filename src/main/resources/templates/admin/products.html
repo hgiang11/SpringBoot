@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý món ăn - Chicken Shop</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<header class="admin-bar">
+    <a th:href="@{/admin/products}" class="admin-logo">🍗 Chicken Shop · Quản trị</a>
+    <nav>
+        <a th:href="@{/admin/products}">Món ăn</a>
+        <a th:href="@{/menu}">Xem trang khách</a>
+    </nav>
+</header>
+
+<main class="admin-main">
+
+    <div class="admin-title">
+        <h1>Quản lý món ăn</h1>
+        <a th:href="@{/admin/products/new}" class="btn btn-primary">+ Thêm món</a>
+    </div>
+
+    <p class="alert" th:if="${message}" th:text="${message}"></p>
+
+    <form th:action="@{/admin/products}" method="get" class="admin-search">
+        <input type="text" name="q" th:value="${q}" placeholder="Tìm theo tên món...">
+        <button type="submit" class="btn">Tìm</button>
+    </form>
+
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên món</th>
+            <th>Danh mục</th>
+            <th>Giá</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${products.content}">
+            <td th:text="${p.id}">1</td>
+            <td th:text="${p.name}">Tên món</td>
+            <td th:text="${p.category.name}">Danh mục</td>
+            <td th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'COMMA')} + ' đ'">35.000 đ</td>
+            <td>
+                <span th:if="${p.available}" class="badge on">Đang bán</span>
+                <span th:unless="${p.available}" class="badge off">Đã ẩn</span>
+            </td>
+            <td>
+                <a th:href="@{/admin/products/{id}/edit(id=${p.id})}" class="btn btn-small">Sửa</a>
+            </td>
+        </tr>
+        <tr th:if="${products.empty}">
+            <td colspan="6" class="empty">Không có món nào.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pager" th:if="${products.totalPages > 1}">
+        <a th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}"
+           th:href="@{/admin/products(page=${i}, q=${q})}"
+           th:text="${i + 1}"
+           th:classappend="${i == products.number} ? 'active'">1</a>
+    </div>
+
+</main>
+</body>
+</html>

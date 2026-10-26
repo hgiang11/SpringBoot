@@ -1,0 +1,249 @@
+/* ==========================================
+   GIAO DIỆN TRANG THỰC ĐƠN (menu.html)
+   ========================================== */
+
+/* 1. THANH DANH MỤC */
+.category-bar {
+    background-color: #fce4e6;
+    padding: 15px 0;
+}
+
+.category-list {
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+    gap: 10px;
+}
+
+.cat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    min-width: 90px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.cat-item.active,
+.cat-item:hover {
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cat-emoji {
+    font-size: 32px;
+    line-height: 45px;
+    height: 45px;
+    margin-bottom: 5px;
+}
+
+.cat-item span {
+    font-size: 11px;
+    font-weight: bold;
+    color: #d30b26;
+}
+
+/* 2. GIAO HÀNG + TÌM KIẾM */
+.delivery-search-section {
+    padding: 30px 0 20px;
+    text-align: center;
+}
+
+.delivery-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.btn-delivery,
+.btn-pickup {
+    border: none;
+    padding: 10px 25px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-delivery.active {
+    background-color: #d30b26;
+    color: #fff;
+}
+
+.btn-pickup {
+    background-color: #e0e0e0;
+    color: #666;
+}
+
+.search-box {
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.search-box input[type="text"] {
+    width: 100%;
+    padding: 10px 45px 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+.btn-search {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #d30b26;
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* 3. LƯỚI SẢN PHẨM */
+.products-section {
+    padding: 20px 15px 60px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.product-card {
+    border: 1px dashed #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    background: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.product-img img {
+    width: 100%;
+    max-height: 220px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.product-name {
+    font-size: 15px;
+    color: #333;
+    font-weight: bold;
+    margin: 12px 0 6px;
+}
+
+.product-desc {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 16px;
+    color: #d30b26;
+    font-weight: bold;
+}
+
+/* Nút đặt hàng */
+.btn-order {
+    margin-top: 12px;
+    width: 100%;
+    padding: 9px 0;
+    background-color: #d30b26;
+    color: #fff;
+    border: none;
+    border-radius: 18px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-order:hover {
+    background-color: #a8081e;
+}
+
+/* 4. KHÔNG CÓ KẾT QUẢ + PHÂN TRANG */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #777;
+    font-size: 15px;
+}
+
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 35px;
+}
+
+.page-num {
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 700;
+    background: #fff;
+}
+
+.page-num:hover {
+    border-color: #d30b26;
+    color: #d30b26;
+}
+
+.page-num.active {
+    background-color: #d30b26;
+    color: #fff;
+    border-color: #d30b26;
+}
+
+/* 5. GIỎ HÀNG NỔI */
+.floating-cart {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    background-color: #fbc02d;
+    color: #333;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 999;
+}
+
+/* 6. RESPONSIVE */
+@media (max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}

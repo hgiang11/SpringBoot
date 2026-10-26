@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jollibee Vietnam - Trang chủ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+
+<!-- 1. HEADER (Dùng lại phần Header chuẩn) -->
+<header class="jollibee-header">
+    <div class="top-bar">
+        <div class="top-bar-wave"></div>
+        <div class="top-bar-container">
+            <div class="top-bar-right">
+                <div class="lang-switch">
+                    <a href="?lang=vi" class="lang-item active"><img src="https://flagcdn.com/w20/vn.png" class="flag-icon"> <span>VN</span></a>
+                    <span class="divider">|</span>
+                    <a href="?lang=en" class="lang-item"><img src="https://flagcdn.com/w20/gb.png" class="flag-icon"> <span>EN</span></a>
+                </div>
+                <a href="#" class="btn-account">
+                    <svg class="user-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <span>ĐĂNG KÝ / ĐĂNG NHẬP</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="main-header">
+        <div class="header-container">
+            <a th:href="@{/}" class="brand-logo"><img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee"></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a th:href="@{/}" class="active">TRANG CHỦ</a></li>
+                    <li><a th:href="@{/jollibee}"
+                           th:classappend="${active == 'jollibee'} ? 'active'">VỀ JOLLIBEE</a></li>
+                    <li><a th:href="@{/menu}">THỰC ĐƠN</a></li>
+                    <li><a href="#">KHUYẾN MÃI</a></li>
+                    <li><a href="#">DỊCH VỤ</a></li>
+                    <li><a href="#">TIN TỨC</a></li>
+                    <li><a href="#">CỬA HÀNG</a></li>
+                    <li><a href="#">LIÊN HỆ</a></li>
+                    <li><a href="#">TUYỂN DỤNG</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<main class="home-main">
+
+    <!-- 2. HERO BANNER SLIDER -->
+    <section class="hero-slider">
+        <div class="slider-wrapper">
+            <img src="https://jollibee.com.vn/media/mageplaza/bannerslider/banner/image/b/a/banner_web_desktop.png" alt="Khuyến mãi Jollibee" onerror="this.src='https://via.placeholder.com/1200x350?text=Jollibee+Promotions'">
+        </div>
+    </section>
+
+    <!-- 3. KHỐI "ĂN GÌ HÔM NAY" (NỀN GỖ) -->
+    <section class="what-to-eat-section">
+        <div class="eat-container">
+            <!-- Cột đỏ bên trái -->
+            <div class="eat-title-card">
+                <div class="bee-icon">🐝</div>
+                <h2>ĂN GÌ<br>HÔM NAY</h2>
+                <p>Thực đơn phong phú, ngon mê ly từ Jollibee!</p>
+            </div>
+
+            <!-- Grid 4 ô món ăn bên phải -->
+            <div class="eat-grid">
+                <a th:href="@{/menu(category=1)}" class="eat-card">
+                    <img src="https://jollibee.com.vn/media/catalog/product/c/h/chicken_1.png" alt="Gà Giòn Vui Vẻ" onerror="this.src='https://via.placeholder.com/150'">
+                    <span class="btn-eat">Gà Giòn Vui Vẻ</span>
+                </a>
+                <a th:href="@{/menu(category=2)}" class="eat-card">
+                    <img src="https://jollibee.com.vn/media/catalog/product/s/p/spaghetti_1.png" alt="Mỳ Ý Jolly" onerror="this.src='https://via.placeholder.com/150'">
+                    <span class="btn-eat">Gà Sốt Cay</span>
+                </a>
+                <a th:href="@{/menu(category=3)}" class="eat-card">
+                    <img src="https://jollibee.com.vn/media/catalog/product/b/u/burger_1.png" alt="Burger & Cơm" onerror="this.src='https://via.placeholder.com/150'">
+                    <span class="btn-eat">Mỳ Ý Jolly</span>
+                </a>
+                <a th:href="@{/menu(category=4)}" class="eat-card">
+                    <img src="https://jollibee.com.vn/media/catalog/product/d/e/dessert_1.png" alt="Món Tráng Miệng" onerror="this.src='https://via.placeholder.com/150'">
+                    <span class="btn-eat">Món Tráng Miệng</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. KHỐI "DỊCH VỤ" -->
+    <section class="services-section">
+        <h2 class="section-title">DỊCH VỤ</h2>
+        <p class="section-subtitle">TẬN HƯỞNG NHỮNG KHOẢNH KHẮC TRỌN VẸN CÙNG JOLLIBEE</p>
+
+        <div class="services-grid">
+            <div class="service-item">
+                <div class="service-icon"><img src="https://jollibee.com.vn/media/wysiwyg/icon-service-1.png" alt="Lấy Tại Cửa Hàng" onerror="this.src='https://via.placeholder.com/60'"></div>
+                <button class="btn-service">LẤY TẠI CỬA HÀNG</button>
+            </div>
+            <div class="service-item">
+                <div class="service-icon"><img src="https://jollibee.com.vn/media/wysiwyg/icon-service-2.png" alt="Đặt Tiệc Sinh Nhật" onerror="this.src='https://via.placeholder.com/60'"></div>
+                <button class="btn-service">ĐẶT TIỆC SINH NHẬT</button>
+            </div>
+            <div class="service-item">
+                <div class="service-icon"><img src="https://jollibee.com.vn/media/wysiwyg/icon-service-3.png" alt="Jollibee Kids Club" onerror="this.src='https://via.placeholder.com/60'"></div>
+                <button class="btn-service">JOLLIBEE KIDS CLUB</button>
+            </div>
+            <div class="service-item">
+                <div class="service-icon"><img src="https://jollibee.com.vn/media/wysiwyg/icon-service-4.png" alt="Đơn Hàng Lớn" onerror="this.src='https://via.placeholder.com/60'"></div>
+                <button class="btn-service">ĐƠN HÀNG LỚN</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. KHỐI "JOLLIBEE, XIN CHÀO" -->
+    <section class="welcome-section">
+        <div class="welcome-container">
+            <div class="welcome-img-left">
+                <img src="https://jollibee.com.vn/media/wysiwyg/spaghetti-plate.png" alt="Mỳ Ý Jollibee" onerror="this.src='https://via.placeholder.com/300'">
+            </div>
+            <div class="welcome-text">
+                <h2>JOLLIBEE, XIN CHÀO</h2>
+                <p>Jollibee là một câu chuyện thành công kỳ diệu vì chỉ từ 2 tiệm kem nhỏ năm 1975 đã phát triển thành công ty thương mại dịch vụ thực phẩm lớn nhất Châu Á. Đến nay, Jollibee đã có hơn 1500 cửa hàng trên toàn thế giới.</p>
+                <a href="#" class="btn-see-more">XEM THÊM</a>
+            </div>
+            <div class="welcome-img-right">
+                <img src="https://jollibee.com.vn/media/wysiwyg/chicken-combo.png" alt="Gà Giòn Jollibee" onerror="this.src='https://via.placeholder.com/350'">
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. THANH TÌM CỬA HÀNG (MÀU CAM) -->
+    <section class="find-store-bar">
+        <div class="store-bar-container">
+            <h3>TÌM CỬA HÀNG</h3>
+            <form class="store-search-form">
+                <select name="province">
+                    <option value="">Tỉnh / Thành phố</option>
+                    <option value="HN">Hà Nội</option>
+                    <option value="HCM">TP. Hồ Chí Minh</option>
+                    <option value="TQ">Tuyên Quang</option>
+                </select>
+                <select name="district">
+                    <option value="">Quận / Huyện</option>
+                </select>
+                <button type="submit">TÌM CỬA HÀNG</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 7. KHỐI "TIN TỨC" -->
+    <section class="news-section">
+        <h2 class="section-title">TIN TỨC</h2>
+        <div class="news-grid">
+            <article class="news-card">
+                <img src="https://jollibee.com.vn/media/magefan_blog/news_1.jpg" alt="Tin tức 1" onerror="this.src='https://via.placeholder.com/260x150'">
+                <h4>JOLLIBEE KHAI TRƯƠNG CỬA HÀNG MỚI TẠI VIỆT NAM</h4>
+            </article>
+            <article class="news-card">
+                <img src="https://jollibee.com.vn/media/magefan_blog/news_2.jpg" alt="Tin tức 2" onerror="this.src='https://via.placeholder.com/260x150'">
+                <h4>KHUẤY ĐỘNG MÙA HÈ VỚI COMBO GÀ GIÒN BÁO BỎ</h4>
+            </article>
+            <article class="news-card">
+                <img src="https://jollibee.com.vn/media/magefan_blog/news_3.jpg" alt="Tin tức 3" onerror="this.src='https://via.placeholder.com/260x150'">
+                <h4>CHƯƠNG TRÌNH TRI ÂN KHÁCH HÀNG THÂN THIẾT</h4>
+            </article>
+            <article class="news-card">
+                <img src="https://jollibee.com.vn/media/magefan_blog/news_4.jpg" alt="Tin tức 4" onerror="this.src='https://via.placeholder.com/260x150'">
+                <h4>JOLLIBEE ĐỒNG HÀNH CÙNG TRẺ EM VIỆT NAM</h4>
+            </article>
+        </div>
+    </section>
+
+</main>
+
+<!-- 8. FOOTER -->
+<footer class="jollibee-footer">
+    <div class="footer-container">
+        <div class="footer-col col-info">
+            <img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee" class="footer-logo">
+            <p><strong>CÔNG TY TNHH JOLLIBEE VIỆT NAM</strong></p>
+            <p>Địa chỉ: Tầng 26, Tòa nhà TTTM Tuyên Quang / TP. Hồ Chí Minh</p>
+            <p>Tổng đài: 1900-1533</p>
+            <p>Mã số thuế: 0303828296</p>
+        </div>
+        <div class="footer-col col-hotline">
+            <div class="hotline-box">
+                <span class="phone-number">1900-1533</span>
+            </div>
+            <span class="delivery-label">GIAO HÀNG TẬN NƠI</span>
+            <ul class="footer-links">
+                <li><a href="#">Chính sách và quy định chung</a></li>
+                <li><a href="#">Chính sách thanh toán khi đặt hàng</a></li>
+                <li><a href="#">Chính sách hoạt động</a></li>
+                <li><a href="#">Chính sách bảo mật thông tin</a></li>
+            </ul>
+        </div>
+        <div class="footer-col col-social">
+            <p><strong>HÃY KẾT NỐI VỚI CHÚNG TÔI</strong></p>
+            <div class="social-links"><a href="#" class="fb-btn">📘 Facebook</a></div>
+            <div class="app-download">
+                <p>TẢI ỨNG DỤNG ĐẶT HÀNG VỚI NHIỀU ƯU ĐÃI HƠN</p>
+                <div class="store-badges">
+                    <span class="badge">Google Play</span>
+                    <span class="badge">App Store</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

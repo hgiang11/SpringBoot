@@ -1,0 +1,749 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+body {
+    background-color: #FFFFFF;
+    color: #333333;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* Color Variables */
+:root {
+    --jollibee-red: #E31837;
+    --jollibee-yellow: #FFC72C;
+    --jollibee-dark-red: #A80D25;
+    --bg-cream: #FDFBF7;
+    --text-gray: #555555;
+}
+
+/* ==========================================================================
+    1. HEADER & NAVIGATION
+    ========================================================================== */
+.jollibee-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+
+/* Top Bar */
+.top-bar {
+    background-color: var(--jollibee-yellow);
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 5%;
+    position: relative;
+}
+
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #333;
+    z-index: 2;
+}
+
+
+.lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.lang-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+
+.lang-item.active, .lang-item:hover {
+    opacity: 1;
+}
+
+
+.flag-icon {
+    width: 18px;
+    height: 12px;
+    border-radius: 2px;
+    object-fit: cover;
+}
+
+
+.btn-account {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #333;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+
+.btn-account:hover {
+    color: var(--jollibee-red);
+}
+
+
+/* Main Header Navigation */
+.main-header {
+    background-color: var(--jollibee-red);
+    height: 70px;
+}
+
+
+.header-container {
+    max-width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+
+.brand-logo img {
+    height: 52px;
+    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.2));
+    transition: transform 0.2s;
+}
+
+
+.brand-logo:hover img {
+    transform: scale(1.03);
+}
+
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 22px;
+}
+
+
+.main-nav a {
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 4px;
+    position: relative;
+    transition: color 0.2s;
+}
+
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background-color: var(--jollibee-yellow);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: var(--jollibee-yellow);
+}
+
+
+.main-nav a.active::after,
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+
+/* ==========================================================================
+   2. SECTION 1: LỊCH SỬ HÌNH THÀNH (YELLOW BANNER)
+   ========================================================================== */
+.history-section {
+    background-color: var(--jollibee-yellow);
+    padding: 50px 20px 60px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.history-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+
+.bee-mascot {
+    flex-shrink: 0;
+    width: 220px;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+    animation: floatBee 3s ease-in-out infinite alternate;
+}
+
+
+@keyframes floatBee {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-8px); }
+}
+
+
+.history-content {
+    max-width: 620px;
+}
+
+
+.history-content h1 {
+    color: var(--jollibee-red);
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+}
+
+
+.history-content p {
+    color: #333333;
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.7;
+    margin-bottom: 14px;
+    text-align: justify;
+}
+
+
+/* ==========================================================================
+   3. SECTION 2: CỬA HÀNG (PHOTO GRID GALLERY)
+   ========================================================================== */
+.store-gallery-section {
+    width: 100%;
+    background-color: #000;
+}
+
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 0.8fr;
+    width: 100%;
+    height: 320px;
+}
+
+
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+
+.gallery-item:hover img {
+    transform: scale(1.08);
+}
+
+
+.gallery-red-box {
+    background-color: var(--jollibee-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    position: relative;
+}
+
+
+.social-icons-box {
+    display: flex;
+    gap: 15px;
+    font-size: 1.5rem;
+}
+
+
+.social-icon-btn {
+    width: 42px;
+    height: 42px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: background 0.3s;
+}
+
+
+.social-icon-btn:hover {
+    background-color: var(--jollibee-yellow);
+    color: var(--jollibee-red);
+}
+
+
+/* ==========================================================================
+   4. SECTION 3: JOLLIBEE VIỆT NAM
+   ========================================================================== */
+.vietnam-section {
+    background-color: var(--bg-cream);
+    padding: 70px 20px;
+    text-align: center;
+    background-image: radial-gradient(#e2d9cc 0.8px, transparent 0.8px);
+    background-size: 20px 20px;
+}
+
+
+.vietnam-container {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+
+.vietnam-section h2 {
+    color: var(--jollibee-red);
+    font-size: 2.1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    letter-spacing: 0.5px;
+    position: relative;
+    display: inline-block;
+}
+
+
+.vietnam-section h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: var(--jollibee-yellow);
+    margin: 8px auto 0 auto;
+    border-radius: 2px;
+}
+
+
+.vietnam-section p {
+    color: var(--text-gray);
+    font-size: 0.93rem;
+    line-height: 1.8;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+
+/* ==========================================================================
+   5. SECTION 4: CÁC GIÁ TRỊ CỐT LÕI (OVERLAY GRID)
+   ========================================================================== */
+.values-section {
+    position: relative;
+    width: 100%;
+    min-height: 480px;
+    background: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+
+.values-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1;
+}
+
+
+.values-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1100px;
+    text-align: center;
+}
+
+
+.values-title {
+    color: var(--jollibee-yellow);
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 45px;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 30px;
+}
+
+
+.value-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #FFFFFF;
+    transition: transform 0.3s ease;
+}
+
+
+.value-card:hover {
+    transform: translateY(-5px);
+}
+
+
+.value-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+}
+
+
+.value-icon svg {
+    width: 48px;
+    height: 48px;
+    fill: #FFFFFF;
+}
+
+
+.value-card h3 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.4;
+    letter-spacing: 0.3px;
+}
+
+
+/* ==========================================================================
+   6. SECTION 5: SỨ MỆNH & TIÊU CHUẨN FSC
+   ========================================================================== */
+.fsc-section {
+    background-color: #FFFFFF;
+    padding: 80px 20px;
+}
+
+
+.fsc-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 60px;
+}
+
+
+.fsc-image {
+    flex: 0 0 400px;
+    position: relative;
+}
+
+
+.fsc-image img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+
+.fsc-details {
+    flex: 1;
+}
+
+
+.fsc-details h2 {
+    color: var(--jollibee-red);
+    font-size: 1.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+
+.fsc-details .mission-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+
+.fsc-details h3 {
+    color: var(--jollibee-red);
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+
+.fsc-details p {
+    color: var(--text-gray);
+    font-size: 0.88rem;
+    line-height: 1.75;
+    margin-bottom: 16px;
+    text-align: justify;
+}
+
+
+/* ==========================================================================
+   7. FOOTER
+   ========================================================================== */
+.jollibee-footer {
+    background-color: var(--jollibee-red);
+    color: #FFFFFF;
+    padding: 50px 20px 30px 20px;
+    border-top: 5px solid var(--jollibee-yellow);
+}
+
+
+.footer-container {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1.1fr;
+    gap: 40px;
+}
+
+
+.footer-col h4 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+
+.footer-logo {
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+
+.company-info p {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    opacity: 0.95;
+    margin-bottom: 6px;
+}
+
+
+/* Hotline Box */
+.hotline-box {
+    background-color: #FFFFFF;
+    color: var(--jollibee-red);
+    border-radius: 30px;
+    padding: 10px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+.delivery-label {
+    display: block;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    color: var(--jollibee-yellow);
+}
+
+
+.footer-links {
+    list-style: none;
+}
+
+
+.footer-links li {
+    margin-bottom: 8px;
+}
+
+
+.footer-links a {
+    font-size: 0.8rem;
+    opacity: 0.9;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+
+.footer-links a:hover {
+    opacity: 1;
+    color: var(--jollibee-yellow);
+    text-decoration: underline;
+}
+
+
+/* Social & App Store Badges */
+.social-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: background 0.3s;
+}
+
+
+.social-btn:hover {
+    background: #FFFFFF;
+    color: var(--jollibee-red);
+}
+
+
+.app-download p {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+
+.store-badges {
+    display: flex;
+    gap: 10px;
+}
+
+
+.badge-btn {
+    background-color: #000;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    border: 1px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+}
+
+
+.badge-btn span:nth-child(2) {
+    font-weight: 800;
+    font-size: 0.85rem;
+}
+
+
+/* Copyright Bar */
+.copyright-bar {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+
+/* ==========================================================================
+   8. RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 992px) {
+    .history-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        height: auto;
+    }
+    .gallery-item {
+        height: 200px;
+    }
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .fsc-container {
+        flex-direction: column;
+    }
+    .fsc-image {
+        flex: none;
+        width: 100%;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+    .main-nav ul {
+        gap: 10px;
+    }
+    .main-nav a {
+        font-size: 0.75rem;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .main-nav {
+        display: none; /* Hide nav on mobile for simplicity */
+    }
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+}

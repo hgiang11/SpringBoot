@@ -1,0 +1,392 @@
+/* ==========================================================================
+   0. BIẾN MÀU & RESET
+   (giữ tên biến của code đầu, thêm alias cho tên biến của code thứ 2)
+   ========================================================================== */
+:root {
+    --jollibee-red: #E31837;
+    --jollibee-red-dark: #A80D25;
+    --jollibee-yellow: #FFC72C;
+    --pink-bg: #FCE8E9;
+    --text-dark: #333333;
+    --text-gray: #555555;
+    --border-color: #E8E8E8;
+
+    /* alias từ code thứ 2 */
+    --jollibee-dark-red: var(--jollibee-red-dark);
+    --bg-cream: #FDFBF7;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body,
+body.jollibee-bg {
+    background-color: #FFFFFF;
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================================================
+   1. HEADER TỔNG THỂ
+   ========================================================================== */
+.jollibee-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 1.1 TOP BAR MÀU VÀNG TRÊN CÙNG */
+.top-bar {
+    background-color: var(--jollibee-yellow);
+    height: 38px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 5%;
+    position: relative;
+}
+
+/* Code thứ 2 không dùng sóng đỏ -> giữ class nhưng ẩn đi */
+.top-bar-wave {
+    display: none;
+}
+
+.top-bar-container {
+    max-width: 1280px;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #333;
+    z-index: 2;
+}
+
+.lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lang-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.lang-item.active,
+.lang-item:hover {
+    opacity: 1;
+}
+
+.flag-icon {
+    width: 18px;
+    height: 12px;
+    border-radius: 2px;
+    object-fit: cover;
+}
+
+.divider {
+    color: #333;
+    opacity: 0.5;
+    font-weight: 400;
+}
+
+.btn-account {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #333;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+.btn-account:hover {
+    color: var(--jollibee-red);
+}
+
+.user-icon {
+    fill: currentColor;
+}
+
+/* 1.2 MAIN HEADER ĐỎ BÊN DƯỚI */
+.main-header {
+    background-color: var(--jollibee-red);
+    height: 70px;
+}
+
+.header-container {
+    max-width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.brand-logo img {
+    height: 52px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.2));
+    transition: transform 0.2s;
+}
+
+.brand-logo:hover img {
+    transform: scale(1.03);
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 22px;
+    align-items: center;
+}
+
+.main-nav a {
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 4px;
+    position: relative;
+    white-space: nowrap;
+    display: inline-block;
+    transition: color 0.2s;
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background-color: var(--jollibee-yellow);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: var(--jollibee-yellow);
+    background-color: transparent;
+}
+
+.main-nav a.active::after,
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+/* ==========================================================================
+   2. FOOTER CHUNG
+   ========================================================================== */
+.jollibee-footer {
+    background-color: var(--jollibee-red);
+    color: #FFFFFF;
+    padding: 50px 20px 30px 20px;
+    border-top: 5px solid var(--jollibee-yellow);
+}
+
+.footer-container {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1.1fr;
+    gap: 40px;
+}
+
+.footer-col h4 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.footer-logo {
+    height: 60px;
+    width: auto;
+    margin-bottom: 15px;
+}
+
+.company-info p {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    opacity: 0.95;
+    margin-bottom: 6px;
+}
+
+/* Hotline */
+.hotline-box {
+    background-color: #FFFFFF;
+    color: var(--jollibee-red);
+    border-radius: 30px;
+    padding: 10px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.phone-number {
+    font-size: inherit;
+    font-weight: 900;
+}
+
+.delivery-label {
+    display: block;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    margin: 0 0 15px 0;
+    color: var(--jollibee-yellow);
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 8px;
+}
+
+.footer-links a {
+    color: #FFFFFF;
+    font-size: 0.8rem;
+    opacity: 0.9;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    color: var(--jollibee-yellow);
+    text-decoration: underline;
+}
+
+/* Mạng xã hội & App Store */
+.social-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: background 0.3s, color 0.3s;
+}
+
+.social-btn:hover {
+    background: #FFFFFF;
+    color: var(--jollibee-red);
+}
+
+.app-download p {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.store-badges {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+/* .badge (code đầu) và .badge-btn (code thứ 2) dùng chung 1 kiểu */
+.badge,
+.badge-btn {
+    background-color: #000;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+}
+
+.badge-btn span:nth-child(2) {
+    font-weight: 800;
+    font-size: 0.85rem;
+}
+
+/* Copyright */
+.copyright-bar {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   3. RESPONSIVE
+   ========================================================================== */
+@media (max-width: 992px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+    .main-nav ul {
+        gap: 10px;
+    }
+    .main-nav a {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .main-nav {
+        display: none;
+    }
+}

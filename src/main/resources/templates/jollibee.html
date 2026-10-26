@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Về Jollibee - Jollibee Việt Nam</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/jollibee.css}">
+
+
+</head>
+<body>
+
+    <header class="jollibee-header">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-right">
+                <div class="lang-switch">
+                    <span class="lang-item active"><img src="https://flagcdn.com/w20/vn.png" alt="VN" class="flag-icon"> VN</span>
+                    <span style="opacity: 0.4;">|</span>
+                    <span class="lang-item"><img src="https://flagcdn.com/w20/gb.png" alt="EN" class="flag-icon"> EN</span>
+                </div>
+                <a href="#" class="btn-account">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <span>ĐĂNG KÝ / ĐĂNG NHẬP</span>
+                </a>
+            </div>
+        </div>
+
+
+        <!-- Main Red Header -->
+        <div class="main-header">
+            <div class="header-container">
+                <a href="#" class="brand-logo">
+                    <img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee Vietnam" onerror="this.src='https://via.placeholder.com/120x50/E31837/FFFFFF?text=Jollibee'">
+                </a>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#">TRANG CHỦ</a></li>
+                        <li><a th:href="@{/jollibee}"
+                               th:classappend="${active == 'jollibee'} ? 'active'">VỀ JOLLIBEE</a></li>
+                        <li><a th:href="@{/menu}">THỰC ĐƠN</a></li>
+                        <li><a href="#">KHUYẾN MÃI</a></li>
+                        <li><a href="#">DỊCH VỤ</a></li>
+                        <li><a href="#">TIN TỨC</a></li>
+                        <li><a href="#">CỬA HÀNG</a></li>
+                        <li><a href="#">LIÊN HỆ</a></li>
+                        <li><a href="#">TUYỂN DỤNG</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+    <main>
+        <!-- 2. SECTION 1: LỊCH SỬ HÌNH THÀNH (YELLOW BANNER) -->
+        <section class="history-section">
+            <div class="history-container">
+                <img src="https://jollibee.com.vn/media/wysiwyg/jollibee-mascot.png" alt="Jollibee Mascot" class="bee-mascot" onerror="this.src='https://via.placeholder.com/200x250/FFC72C/E31837?text=🐝+Jollibee'">
+                <div class="history-content">
+                    <h1>LỊCH SỬ HÌNH THÀNH</h1>
+                    <p>Jollibee là một câu chuyện thành công kỳ diệu vì chỉ từ 2 tiệm kem nhỏ năm 1975, chuyên bán chè và kem tươi sau đó biến thành cửa hàng bán đồ ăn nhanh với món gà rán giòn ngon nổi tiếng. Đến nay, Jollibee đã trở thành tập đoàn thương mại dịch vụ thực phẩm lớn nhất Châu Á với thương hiệu dẫn đầu tại Philippines.</p>
+                    <p>Jollibee hiện có hơn 1500 cửa hàng tại Philippines và hơn 200 cửa hàng tại các quốc gia trên thế giới như Hoa Kỳ, Hong Kong, Các Tiểu vương quốc Ả Rập Thống nhất, Qatar, Brunei, Singapore, Ý, Anh, Canada, Tây Ban Nha... và Việt Nam.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 3. SECTION 2: CỬA HÀNG (GRID GALLERY) -->
+        <section class="store-gallery-section">
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Jollibee Store Corner">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" alt="Jollibee Store Front">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=600&q=80" alt="Jollibee Opening Event">
+                </div>
+                <div class="gallery-item gallery-red-box">
+                    <div class="social-icons-box">
+                        <a href="#" class="social-icon-btn">f</a>
+                        <a href="#" class="social-icon-btn">✉</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 4. SECTION 3: JOLLIBEE VIỆT NAM -->
+        <section class="vietnam-section">
+            <div class="vietnam-container">
+                <h2>JOLLIBEE VIỆT NAM</h2>
+                <p>Cửa hàng Jollibee đầu tiên được mở tại Việt Nam vào năm 2005. Tới nay, Jollibee đã có hơn 180 cửa hàng tại Việt Nam trải rộng trên toàn quốc, mang đến những bữa ăn ngon miệng cho hàng triệu gia đình Việt.</p>
+                <p>Đến nay, Jollibee Việt Nam luôn nỗ lực hết mình để thực hiện sứ mệnh mang lại niềm vui ẩm thực cho mọi gia đình Việt. Jollibee không chỉ mang đến cho khách hàng những món ăn ngon, chất lượng chuẩn quốc tế, mà còn chú trọng tạo ra không gian ấm cúng, sang trọng, cùng sự phục vụ chu đáo, tận tình của đội ngũ nhân viên. Tất cả nhằm biến mỗi khoảnh khắc của khách hàng tại Jollibee thành một trải nghiệm ẩm thực trọn vẹn và tràn đầy niềm vui. Jollibee Việt Nam luôn mong muốn tiếp tục mở rộng hệ thống, đưa thương hiệu đến gần hơn với mọi người dân trên mọi miền đất nước.</p>
+            </div>
+        </section>
+
+
+        <!-- 5. SECTION 4: CÁC GIÁ TRỊ CỐT LÕI (OVERLAY GRID) -->
+        <section class="values-section">
+            <div class="values-content">
+                <h2 class="values-title">CÁC GIÁ TRỊ CỐT LÕI</h2>
+                <div class="values-grid">
+                    <!-- Value 1 -->
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </div>
+                        <h3>KHÁCH HÀNG LÀ TRUNG TÂM</h3>
+                    </div>
+
+
+                    <!-- Value 2 -->
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        </div>
+                        <h3>MÔI TRƯỜNG LÀM VIỆC ĐỘI NHÓM</h3>
+                    </div>
+
+
+                    <!-- Value 3 -->
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <h3>LUÔN THỂ HIỆN SỰ TÔN TRỌNG ĐỐI VỚI CÁ NHÂN</h3>
+                    </div>
+
+
+                    <!-- Value 4 -->
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.45l8.15 14.1H3.85L12 5.45zM11 10h2v4h-2zm0 5h2v2h-2z"/></svg>
+                        </div>
+                        <h3>TINH THẦN LÀM CHỦ</h3>
+                    </div>
+
+
+                    <!-- Value 5 -->
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                        </div>
+                        <h3>TRUNG THỰC VÀ KHIÊM TỐN</h3>
+                    </div>
+
+
+                    <!-- Value 6 -->
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                        </div>
+                        <h3>NAO TÂM SỐNG NGHỀ VÀ HỌC HỎI</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 6. SECTION 5: SỨ MỆNH & TIÊU CHUẨN FSC -->
+        <section class="fsc-section">
+            <div class="fsc-container">
+                <div class="fsc-image">
+                    <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=800&q=80" alt="Jollibee Chicken Bucket">
+                </div>
+                <div class="fsc-details">
+                    <h2>SỨ MỆNH</h2>
+                    <p class="mission-text">"Mang lại niềm vui ẩm thực cho mọi gia đình bằng cách trao tận tay khách hàng những món ăn ngon, chất lượng và dịch vụ chu đáo."</p>
+
+
+                    <h3>CÁC TIÊU CHUẨN FSC</h3>
+                    <p>Bí quyết thành công của các cửa hàng Jollibee chính là áp dụng nghiêm ngặt và triệt để các tiêu chuẩn FSC viết tắt từ 3 từ tiếng Anh: <strong>"Food" (Thức ăn)</strong>, <strong>"Service" (Phục vụ)</strong> và <strong>"Cleanliness" (Sạch sẽ)</strong>. Tất cả nhằm đảm bảo mang đến trải nghiệm tuyệt vời nhất cho mỗi khách hàng khi ghé thăm.</p>
+                    <p><strong>Food (Thức ăn):</strong> Chất lượng sản phẩm luôn được đặt lên hàng đầu. Các nguyên liệu được kiểm duyệt kỹ lưỡng, quy trình chế biến tuân thủ nghiêm ngặt chuẩn vệ sinh an toàn thực phẩm. Gà rán luôn giòn rụm bên ngoài, mọng nước bên trong, mỳ Ý luôn đậm đà hương vị truyền thống.</p>
+                    <p><strong>Service (Phục vụ):</strong> Đội ngũ nhân viên luôn phục vụ với nụ cười trên môi, thân thiện, nhanh chóng và tận tâm. Khách hàng luôn cảm nhận được sự chào đón nồng nhiệt như ở nhà.</p>
+                    <p><strong>Cleanliness (Sạch sẽ):</strong> Từng góc nhỏ trong cửa hàng từ bàn ăn, sàn nhà đến khu vực chế biến đều được giữ vệ sinh tuyệt đối, mang lại không gian thoải mái và an tâm nhất cho thực khách.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <!-- 7. FOOTER -->
+    <footer class="jollibee-footer">
+        <div class="footer-container">
+            <!-- Company Info Column -->
+            <div class="footer-col company-info">
+                <img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee Logo" class="footer-logo">
+                <p><strong>CÔNG TY TNHH JOLLIBEE VIỆT NAM</strong></p>
+                <p>Địa chỉ: Tầng 26, Tòa nhà TTTM Tuyên Quang / TP. Hồ Chí Minh</p>
+                <p>Tổng đài: 1900-1533</p>
+                <p>Mã số thuế: 0303828296</p>
+            </div>
+
+
+            <!-- Hotline & Policies Column -->
+            <div class="footer-col">
+                <div class="hotline-box">
+                    <span>📞 1900 - 1533</span>
+                </div>
+                <span class="delivery-label">GIAO HÀNG TẬN NƠI</span>
+                <ul class="footer-links">
+                    <li><a href="#">Chính sách và quy định chung</a></li>
+                    <li><a href="#">Chính sách thanh toán khi đặt hàng</a></li>
+                    <li><a href="#">Chính sách hoạt động</a></li>
+                    <li><a href="#">Chính sách bảo mật thông tin</a></li>
+                    <li><a href="#">Chính sách vận chuyển và giao nhận</a></li>
+                </ul>
+            </div>
+
+
+            <!-- Social & App Download Column -->
+            <div class="footer-col">
+                <h4>HÃY KẾT NỐI VỚI CHÚNG TÔI</h4>
+                <div class="social-buttons">
+                    <a href="#" class="social-btn">📘 Facebook</a>
+                </div>
+
+
+                <div class="app-download">
+                    <p>TẢI ỨNG DỤNG ĐẶT HÀNG VỚI NHIỀU ƯU ĐÃI HƠN</p>
+                    <div class="store-badges">
+                        <div class="badge-btn">
+                            <span>GET IT ON</span>
+                            <span>Google Play</span>
+                        </div>
+                        <div class="badge-btn">
+                            <span>Download on the</span>
+                            <span>App Store</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="copyright-bar">
+            <p>© 2026 Jollibee Vietnam. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+
+    </body>
+
+</html>
+

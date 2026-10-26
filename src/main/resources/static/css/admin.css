@@ -39,3 +39,4 @@ body { margin: 0; font-family: Arial, sans-serif; background: #f6f3ee; color: #2
 .form-actions { display: flex; gap: 10px; }
 .inline-form { display: inline; }
 .actions { white-space: nowrap; }
+.alert-error { background: #fdeaea; border-color: #f0a8a8; color: #a01818; }

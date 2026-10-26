@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý danh mục - Chicken Shop</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<header class="admin-bar">
+    <a th:href="@{/admin/products}" class="admin-logo">🍗 Chicken Shop · Quản trị</a>
+    <nav>
+        <a th:href="@{/admin/products}">Món ăn</a>
+        <a th:href="@{/admin/categories}">Danh mục</a>
+        <a th:href="@{/admin/orders}">Đơn hàng</a>
+        <a th:href="@{/menu}">Xem trang khách</a>
+    </nav>
+</header>
+
+<main class="admin-main">
+
+    <div class="admin-title">
+        <h1>Quản lý danh mục</h1>
+        <a th:href="@{/admin/categories/new}" class="btn btn-primary">+ Thêm danh mục</a>
+    </div>
+
+    <p class="alert" th:if="${message}" th:text="${message}"></p>
+    <p class="alert alert-error" th:if="${error}" th:text="${error}"></p>
+
+    <table class="admin-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên danh mục</th>
+            <th>Số món</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${categories}">
+            <td th:text="${c.id}">1</td>
+            <td th:text="${c.name}">Gà rán</td>
+            <td th:text="${#lists.size(c.products)}">0</td>
+            <td class="actions">
+                <a th:href="@{/admin/categories/{id}/edit(id=${c.id})}" class="btn btn-small">Sửa</a>
+                <form th:action="@{/admin/categories/{id}/delete(id=${c.id})}" method="post"
+                      class="inline-form"
+                      onsubmit="return confirm('Bạn chắc chắn muốn xóa danh mục này?');">
+                    <button type="submit" class="btn btn-small">Xóa</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(categories)}">
+            <td colspan="4" class="empty">Chưa có danh mục nào.</td>
+        </tr>
+        </tbody>
+    </table>
+
+</main>
+</body>
+</html>

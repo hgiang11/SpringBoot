@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Chicken Shop</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+<main class="auth-card">
+    <a th:href="@{/menu}" class="auth-back">← Về thực đơn</a>
+    <h1>🍗 Đăng ký tài khoản</h1>
+
+    <form th:action="@{/register}" th:object="${registerForm}" method="post">
+
+        <div class="field">
+            <label for="username">Tên đăng nhập *</label>
+            <input type="text" id="username" th:field="*{username}">
+            <span class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+        </div>
+
+        <div class="field">
+            <label for="password">Mật khẩu *</label>
+            <input type="password" id="password" th:field="*{password}">
+            <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <div class="field">
+            <label for="confirmPassword">Nhập lại mật khẩu *</label>
+            <input type="password" id="confirmPassword" th:field="*{confirmPassword}">
+            <span class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
+        </div>
+
+        <div class="field">
+            <label for="fullName">Họ tên *</label>
+            <input type="text" id="fullName" th:field="*{fullName}">
+            <span class="error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+        </div>
+
+        <div class="field">
+            <label for="phone">Số điện thoại *</label>
+            <input type="text" id="phone" th:field="*{phone}">
+            <span class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+        </div>
+
+        <div class="field">
+            <label for="address">Địa chỉ</label>
+            <input type="text" id="address" th:field="*{address}">
+            <span class="error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+        </div>
+
+        <button type="submit" class="btn-auth">ĐĂNG KÝ</button>
+    </form>
+
+    <p class="auth-switch">Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a></p>
+</main>
+</body>
+</html>

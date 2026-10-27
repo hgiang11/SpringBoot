@@ -254,3 +254,4 @@
 .toast-error { background: #fdeaea; color: #a01818; }
 a.floating-cart { text-decoration: none; }
 .product-info form { margin: 0; }
+a.btn-order { display: block; text-align: center; text-decoration: none; line-height: 1.6; }

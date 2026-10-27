@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
+
 @Controller
 public class ProductController {
 
@@ -39,14 +41,14 @@ public class ProductController {
                        Model model) {
 
         Page<Product> products = productService.search(q, category, page, PAGE_SIZE);
-        User user = currentUserService.getCurrentUser();
+        User user = currentUserService.findCurrentUser().orElse(null);
 
         model.addAttribute("products", products);
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("q", q);
         model.addAttribute("selectedCategory", category);
-        model.addAttribute("cartCount", cartService.countItems(user));
-        model.addAttribute("cartTotal", cartService.getTotal(user));
+        model.addAttribute("cartCount", user == null ? 0 : cartService.countItems(user));
+        model.addAttribute("cartTotal", user == null ? BigDecimal.ZERO : cartService.getTotal(user));
         model.addAttribute("active", "menu");
         return "menu";
     }

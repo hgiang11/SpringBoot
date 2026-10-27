@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Chicken Shop</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+<main class="auth-card">
+    <a th:href="@{/menu}" class="auth-back">← Về thực đơn</a>
+    <h1>🍗 Đăng nhập</h1>
+
+    <div class="toast" th:if="${message}" th:text="${message}"></div>
+    <div class="toast toast-error" th:if="${param.error}">Sai tên đăng nhập hoặc mật khẩu</div>
+    <div class="toast" th:if="${param.logout}">Bạn đã đăng xuất</div>
+
+    <form th:action="@{/login}" method="post">
+        <div class="field">
+            <label for="username">Tên đăng nhập</label>
+            <input type="text" id="username" name="username" autofocus>
+        </div>
+        <div class="field">
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" name="password">
+        </div>
+        <button type="submit" class="btn-auth">ĐĂNG NHẬP</button>
+    </form>
+
+    <p class="auth-switch">Chưa có tài khoản? <a th:href="@{/register}">Đăng ký</a></p>
+</main>
+</body>
+</html>

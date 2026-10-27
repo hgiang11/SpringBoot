@@ -390,3 +390,9 @@ img {
         display: none;
     }
 }
+
+
+
+.user-hello { color: #333; font-size: 13px; margin-right: 12px; }
+.logout-form { display: inline; margin: 0; }
+.btn-logout { background: none; border: none; cursor: pointer; font: inherit; color: inherit; }

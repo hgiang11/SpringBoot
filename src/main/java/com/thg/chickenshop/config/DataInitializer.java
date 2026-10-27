@@ -8,6 +8,7 @@ import com.thg.chickenshop.repository.CategoryRepository;
 import com.thg.chickenshop.repository.ProductRepository;
 import com.thg.chickenshop.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
@@ -17,30 +18,43 @@ public class DataInitializer implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;       // thêm field
+
     public DataInitializer(CategoryRepository categoryRepository,
                            ProductRepository productRepository,
-                           UserRepository userRepository) {
+                           UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {      // thêm tham số
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) {
-        seedTempCustomer();
+        seedUsers();
         seedMenu();
     }
 
-    private void seedTempCustomer() {
-        if (userRepository.existsByUsername("customer1")) return;
+    private void seedUsers() {
+        saveUser("admin", "Admin@123", "Quản trị viên", "0900000001", "Cửa hàng", Role.ADMIN);
+        saveUser("customer1", "Customer@123", "Khách hàng mẫu", "0900000000", "123 Đường ABC", Role.CUSTOMER);
+    }
 
-        User u = new User();
-        u.setUsername("customer1");
-        u.setPassword("temp-password");     // TẠM: Ngày 5 thay bằng mật khẩu mã hóa BCrypt
-        u.setFullName("Khách hàng mẫu");
-        u.setPhone("0900000000");
-        u.setAddress("123 Đường ABC");
-        u.setRole(Role.CUSTOMER);
+    private void saveUser(String username, String rawPassword, String fullName,
+                          String phone, String address, Role role) {
+        User u = userRepository.findByUsername(username).orElseGet(User::new);
+        if (u.getId() == null) {                       // tài khoản mới
+            u.setUsername(username);
+            u.setFullName(fullName);
+            u.setPhone(phone);
+            u.setAddress(address);
+            u.setRole(role);
+        }
+        // Mật khẩu chưa mã hóa (chuỗi BCrypt luôn bắt đầu bằng "$2") thì mã hóa lại
+        if (u.getPassword() == null || !u.getPassword().startsWith("$2")) {
+            u.setPassword(passwordEncoder.encode(rawPassword));
+        }
         userRepository.save(u);
     }
     public void seedMenu(String... args) {

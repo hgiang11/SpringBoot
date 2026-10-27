@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="header(active)" class="jollibee-header">
+    <div class="top-bar">
+        <div class="top-bar-wave"></div>
+        <div class="top-bar-container">
+            <div class="top-bar-right">
+                <div class="lang-switch">
+                    <a href="?lang=vi" class="lang-item" th:classappend="${#locale.language == 'vi'} ? 'active'">
+                        <img src="https://flagcdn.com/w20/vn.png" class="flag-icon" alt="VN"> <span>VN</span></a>
+                    <span class="divider">|</span>
+                    <a href="?lang=en" class="lang-item" th:classappend="${#locale.language == 'en'} ? 'active'">
+                        <img src="https://flagcdn.com/w20/gb.png" class="flag-icon" alt="EN"> <span>EN</span></a>
+                </div>
+                <th:block th:replace="~{fragments/account :: account}"></th:block>
+            </div>
+        </div>
+    </div>
+    <div class="main-header">
+        <div class="header-container">
+            <a th:href="@{/}" class="brand-logo">
+                <span class="brand-text" th:text="'🍗 ' + #{brand.name}">🍗 Chicken Shop</span>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a th:href="@{/}" th:classappend="${active == 'home'} ? 'active'" th:text="#{nav.home}">TRANG CHỦ</a></li>
+                    <li><a th:href="@{/jollibee}" th:classappend="${active == 'jollibee'} ? 'active'" th:text="#{nav.about}">GIỚI THIỆU</a></li>
+                    <li><a th:href="@{/menu}" th:classappend="${active == 'menu'} ? 'active'" th:text="#{nav.menu}">THỰC ĐƠN</a></li>
+                    <li><a href="#" th:text="#{nav.promo}">KHUYẾN MÃI</a></li>
+                    <li><a href="#" th:text="#{nav.services}">DỊCH VỤ</a></li>
+                    <li><a href="#" th:text="#{nav.news}">TIN TỨC</a></li>
+                    <li><a href="#" th:text="#{nav.stores}">CỬA HÀNG</a></li>
+                    <li><a href="#" th:text="#{nav.contact}">LIÊN HỆ</a></li>
+                    <li><a href="#" th:text="#{nav.careers}">TUYỂN DỤNG</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+</body>
+</html>
+
+
+
+<!--&lt;!&ndash; 1. HEADER / NAVBAR &ndash;&gt;-->
+<!--<header class="jollibee-header">-->
+<!--    <div class="top-bar">-->
+<!--        <div class="top-bar-right">-->
+<!--            <div class="lang-switch">-->
+<!--                <span class="lang-item active"><img src="https://flagcdn.com/w20/vn.png" alt="VN" class="flag-icon"> VN</span>-->
+<!--                <span style="opacity: 0.4;">|</span>-->
+<!--                <span class="lang-item"><img src="https://flagcdn.com/w20/gb.png" alt="EN" class="flag-icon"> EN</span>-->
+<!--            </div>-->
+<!--            <th:block th:replace="~{fragments/account :: account}"></th:block>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="main-header">-->
+<!--        <div class="header-container">-->
+<!--            <a href="#" class="brand-logo">-->
+<!--                <img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee Vietnam"-->
+<!--                     onerror="this.src='https://via.placeholder.com/120x50/E31837/FFFFFF?text=Jollibee'">-->
+<!--            </a>-->
+<!--            <nav class="main-nav">-->
+<!--                <ul>-->
+<!--                    <li><a th:href="@{/home}">TRANG CHỦ</a></li>-->
+<!--                    <li><a th:href="@{/jollibee}" th:classappend="${active == 'jollibee'} ? 'active'">VỀ JOLLIBEE</a></li>-->
+<!--                    <li><a th:href="@{/menu}">THỰC ĐƠN</a></li>-->
+<!--                    <li><a href="#">KHUYẾN MÃI</a></li>-->
+<!--                    <li><a href="#">DỊCH VỤ</a></li>-->
+<!--                    <li><a href="#">TIN TỨC</a></li>-->
+<!--                    <li><a href="#">CỬA HÀNG</a></li>-->
+<!--                    <li><a href="#">LIÊN HỆ</a></li>-->
+<!--                    <li><a href="#">TUYỂN DỤNG</a></li>-->
+<!--                </ul>-->
+<!--            </nav>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header-->
+

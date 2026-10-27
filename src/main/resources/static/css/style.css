@@ -402,3 +402,4 @@ img {
 .js-toast.show { opacity: 1; }
 .js-toast.error { background: #a01818; }
 .js .qty-form .btn-small { display: none; }
+.brand-text { color: #fff; font-size: 1.5rem; font-weight: 900; white-space: nowrap; }

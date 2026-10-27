@@ -5,18 +5,19 @@
 <th:block th:fragment="account">
 
     <!-- Chưa đăng nhập -->
-    <a th:if="${currentUser == null}" th:href="@{/login}" class="btn-account"><span>ĐĂNG NHẬP</span></a>
-    <a th:if="${currentUser == null}" th:href="@{/register}" class="btn-account"><span>ĐĂNG KÝ</span></a>
+    <a th:if="${currentUser == null}" th:href="@{/login}" class="btn-account"><span th:text="#{auth.login}">ĐĂNG NHẬP</span></a>
+    <a th:if="${currentUser == null}" th:href="@{/register}" class="btn-account"><span th:text="#{auth.register}">ĐĂNG KÝ</span></a>
 
     <!-- Đã đăng nhập -->
     <span th:if="${currentUser != null}" class="user-hello">
-        Xin chào, <strong th:text="${currentUser.fullName}">Khách</strong>
+        <span th:text="#{auth.hello}">Xin chào,</span>
+        <strong th:text="${currentUser.fullName}">Khách</strong>
     </span>
-    <a th:if="${currentUser != null}" th:href="@{/orders}" class="btn-account"><span>ĐƠN CỦA TÔI</span></a>
-    <a th:if="${isAdmin}" th:href="@{/admin/products}" class="btn-account"><span>QUẢN TRỊ</span></a>
+    <a th:if="${currentUser != null}" th:href="@{/orders}" class="btn-account"><span th:text="#{header.orders}">ĐƠN CỦA TÔI</span></a>
+    <a th:if="${isAdmin}" th:href="@{/admin/products}" class="btn-account"><span th:text="#{header.admin}">QUẢN TRỊ</span></a>
 
     <form th:if="${currentUser != null}" th:action="@{/logout}" method="post" class="logout-form">
-        <button type="submit" class="btn-account btn-logout"><span>ĐĂNG XUẤT</span></button>
+        <button type="submit" class="btn-account btn-logout"><span th:text="#{auth.logout}">ĐĂNG XUẤT</span></button>
     </form>
 
 </th:block>

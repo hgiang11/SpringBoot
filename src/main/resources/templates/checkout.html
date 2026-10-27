@@ -10,40 +10,9 @@
 </head>
 <body class="jollibee-bg">
 
-<header class="jollibee-header">
-    <div class="top-bar">
-        <div class="top-bar-right">
-            <div class="lang-switch">
-                <span class="lang-item active"><img src="https://flagcdn.com/w20/vn.png" alt="VN" class="flag-icon"> VN</span>
-                <span style="opacity: 0.4;">|</span>
-                <span class="lang-item"><img src="https://flagcdn.com/w20/gb.png" alt="EN" class="flag-icon"> EN</span>
-            </div>
-            <th:block th:replace="~{fragments/account :: account}"></th:block>
-        </div>
-    </div>
+<header th:replace="~{fragments/header :: header(${active})}"></header>
 
-    <div class="main-header">
-        <div class="header-container">
-            <a href="#" class="brand-logo">
-                <img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee Vietnam"
-                     onerror="this.src='https://via.placeholder.com/120x50/E31837/FFFFFF?text=Jollibee'">
-            </a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a th:href="@{/home}">TRANG CHỦ</a></li>
-                    <li><a th:href="@{/jollibee}" th:classappend="${active == 'jollibee'} ? 'active'">VỀ JOLLIBEE</a></li>
-                    <li><a th:href="@{/menu}">THỰC ĐƠN</a></li>
-                    <li><a href="#">KHUYẾN MÃI</a></li>
-                    <li><a href="#">DỊCH VỤ</a></li>
-                    <li><a href="#">TIN TỨC</a></li>
-                    <li><a href="#">CỬA HÀNG</a></li>
-                    <li><a href="#">LIÊN HỆ</a></li>
-                    <li><a href="#">TUYỂN DỤNG</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</header>
+
 <main class="cart-main">
     <h1>Xác nhận đơn hàng</h1>
 

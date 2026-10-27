@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- CSRF token (chỉ xuất hiện khi dự án có Spring Security) -->
-    <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}">
+
+    <meta name="i18n-error" th:content="${#messages.msg('common.error')}">
+    <meta name="i18n-qty-range" th:content="${#messages.msg('cart.qtyRange', 20)}">    <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:if="${_csrf != null}" th:content="${_csrf.headerName}">
     <title>Giỏ hàng - Chicken Shop</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -13,59 +14,27 @@
 </head>
 <body class="jollibee-bg">
 
-<header class="jollibee-header">
-    <div class="top-bar">
-        <div class="top-bar-wave"></div>
-        <div class="top-bar-container">
-            <div class="top-bar-right">
-                <div class="lang-switch">
-                    <a href="?lang=vi" class="lang-item active"><img src="https://flagcdn.com/w20/vn.png" class="flag-icon"> <span>VN</span></a>
-                    <span class="divider">|</span>
-                    <a href="?lang=en" class="lang-item"><img src="https://flagcdn.com/w20/gb.png" class="flag-icon"> <span>EN</span></a>
-                </div>
-                <th:block th:replace="~{fragments/account :: account}"></th:block>
-            </div>
-        </div>
-    </div>
-    <div class="main-header">
-        <div class="header-container">
-            <a th:href="@{/}" class="brand-logo"><img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee"></a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a th:href="@{/}" th:classappend="${active == 'home'} ? 'active'">TRANG CHỦ</a></li>                    <li><a th:href="@{/jollibee}"
-                           th:classappend="${active == 'jollibee'} ? 'active'">VỀ JOLLIBEE</a></li>
-                    <li><a th:href="@{/menu}">THỰC ĐƠN</a></li>
-                    <li><a href="#">KHUYẾN MÃI</a></li>
-                    <li><a href="#">DỊCH VỤ</a></li>
-                    <li><a href="#">TIN TỨC</a></li>
-                    <li><a href="#">CỬA HÀNG</a></li>
-                    <li><a href="#">LIÊN HỆ</a></li>
-                    <li><a href="#">TUYỂN DỤNG</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</header>
+<header th:replace="~{fragments/header :: header(${active})}"></header>
 
 <main class="cart-main">
-    <h1>Giỏ hàng của bạn</h1>
+    <h1 th:text="#{cart.title}">Giỏ hàng của bạn</h1>
 
     <div class="toast" th:if="${message}" th:text="${message}"></div>
     <div class="toast toast-error" th:if="${error}" th:text="${error}"></div>
 
     <div class="cart-empty" th:if="${#lists.isEmpty(cart.items)}">
-        <p>Giỏ hàng của bạn đang trống.</p>
-        <a th:href="@{/menu}" class="btn-continue">Xem thực đơn</a>
+        <p th:text="#{cart.empty}">Giỏ hàng của bạn đang trống.</p>
+        <a th:href="@{/menu}" class="btn-continue" th:text="#{cart.viewMenu}">Xem thực đơn</a>
     </div>
 
     <div th:unless="${#lists.isEmpty(cart.items)}">
         <table class="cart-table">
             <thead>
             <tr>
-                <th>Món</th>
-                <th>Đơn giá</th>
-                <th>Số lượng</th>
-                <th>Thành tiền</th>
+                <th th:text="#{cart.col.item}">Món</th>
+                <th th:text="#{cart.col.price}">Đơn giá</th>
+                <th th:text="#{cart.col.qty}">Số lượng</th>
+                <th th:text="#{cart.col.subtotal}">Thành tiền</th>
                 <th></th>
             </tr>
             </thead>
@@ -73,7 +42,8 @@
             <tr th:each="item : ${cart.items}">
                 <td>
                     <strong th:text="${item.product.name}">Tên món</strong>
-                    <span class="unavailable" th:unless="${item.product.available}">Món đã ngừng bán</span>
+                    <span class="unavailable" th:unless="${item.product.available}"
+                          th:text="#{cart.unavailable}">Món đã ngừng bán</span>
                 </td>
                 <td th:text="${#numbers.formatDecimal(item.product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">35.000 ₫</td>
                 <td>
@@ -81,7 +51,7 @@
                           class="qty-form js-qty-form"
                           th:attr="data-url=@{/api/cart/items/{id}(id=${item.id})}">
                         <input type="number" name="quantity" th:value="${item.quantity}" min="1" max="20">
-                        <button type="submit" class="btn-small">Cập nhật</button>
+                        <button type="submit" class="btn-small" th:text="#{cart.update}">Cập nhật</button>
                     </form>
                 </td>
                 <td class="js-subtotal"
@@ -90,7 +60,7 @@
                     <form th:action="@{/cart/items/{id}/remove(id=${item.id})}" method="post"
                           class="js-remove-form"
                           th:attr="data-url=@{/api/cart/items/{id}(id=${item.id})}">
-                        <button type="submit" class="btn-small btn-remove">Xóa</button>
+                        <button type="submit" class="btn-small btn-remove" th:text="#{cart.remove}">Xóa</button>
                     </form>
                 </td>
             </tr>
@@ -99,17 +69,16 @@
 
         <div class="cart-summary">
             <div class="cart-total">
-                Tổng cộng:
+                <span th:text="#{cart.total}">Tổng cộng:</span>
                 <strong data-cart-total
                         th:text="${#numbers.formatDecimal(cart.total, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</strong>
             </div>
             <div class="cart-actions">
-                <a th:href="@{/menu}" class="btn-continue">Tiếp tục chọn món</a>
-                <a th:href="@{/checkout}" class="btn-checkout">Thanh toán</a>
+                <a th:href="@{/menu}" class="btn-continue" th:text="#{cart.continue}">Tiếp tục chọn món</a>
+                <a th:href="@{/checkout}" class="btn-checkout" th:text="#{cart.checkout}">Thanh toán</a>
             </div>
         </div>
     </div>
 </main>
-
 </body>
 </html>

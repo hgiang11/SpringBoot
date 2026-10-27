@@ -1,5 +1,6 @@
 package com.thg.chickenshop.exception;
 
+import com.thg.chickenshop.service.MessageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,11 +11,17 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final MessageService messageService;
+
+    public GlobalExceptionHandler(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFound(NotFoundException ex, Model model) {
         model.addAttribute("status", 404);
-        model.addAttribute("message", ex.getMessage());
+        model.addAttribute("message", messageService.get(ex.getMessage()));
         return "error";
     }
 
@@ -22,7 +29,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleBusiness(BusinessException ex, Model model) {
         model.addAttribute("status", 400);
-        model.addAttribute("message", ex.getMessage());
+        model.addAttribute("message", messageService.get(ex.getMessage(), ex.getArgs()));
         return "error";
     }
 
@@ -30,7 +37,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     public String handleTooLarge(Model model) {
         model.addAttribute("status", 413);
-        model.addAttribute("message", "File quá lớn, tối đa 5MB");
+        model.addAttribute("message", messageService.get("error.fileTooLarge"));
         return "error";
     }
 }

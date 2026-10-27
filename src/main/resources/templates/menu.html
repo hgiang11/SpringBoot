@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thực đơn - Jollibee Vietnam</title>
+    <meta name="i18n-error" th:content="${#messages.msg('common.error')}">
+    <meta name="i18n-qty-range" th:content="${#messages.msg('cart.qtyRange', 20)}">
+    <title th:text="#{menu.title} + ' - ' + #{brand.name}">Thực đơn</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -17,49 +19,13 @@
 
 <body class="jollibee-bg">
 
-<!-- 1. HEADER / NAVBAR -->
-<header class="jollibee-header">
-    <div class="top-bar">
-        <div class="top-bar-right">
-            <div class="lang-switch">
-                <span class="lang-item active"><img src="https://flagcdn.com/w20/vn.png" alt="VN" class="flag-icon"> VN</span>
-                <span style="opacity: 0.4;">|</span>
-                <span class="lang-item"><img src="https://flagcdn.com/w20/gb.png" alt="EN" class="flag-icon"> EN</span>
-            </div>
-            <th:block th:replace="~{fragments/account :: account}"></th:block>
-        </div>
-    </div>
-
-    <div class="main-header">
-        <div class="header-container">
-            <a href="#" class="brand-logo">
-                <img src="https://jollibee.com.vn/images/logo.png" alt="Jollibee Vietnam"
-                     onerror="this.src='https://via.placeholder.com/120x50/E31837/FFFFFF?text=Jollibee'">
-            </a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a th:href="@{/home}">TRANG CHỦ</a></li>
-                    <li><a th:href="@{/jollibee}" th:classappend="${active == 'jollibee'} ? 'active'">VỀ JOLLIBEE</a></li>
-                    <li><a th:href="@{/menu}">THỰC ĐƠN</a></li>
-                    <li><a href="#">KHUYẾN MÃI</a></li>
-                    <li><a href="#">DỊCH VỤ</a></li>
-                    <li><a href="#">TIN TỨC</a></li>
-                    <li><a href="#">CỬA HÀNG</a></li>
-                    <li><a href="#">LIÊN HỆ</a></li>
-                    <li><a href="#">TUYỂN DỤNG</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</header>
-
-<!-- 2. THANH DANH MỤC (giao diện mới + chức năng lọc cũ) -->
+<header th:replace="~{fragments/header :: header(${active})}"></header><!-- 2. THANH DANH MỤC (giao diện mới + chức năng lọc cũ) -->
 <section class="category-bar">
     <div class="container category-list">
         <a th:href="@{/menu(q=${q})}" class="cat-item"
            th:classappend="${selectedCategory == null} ? 'active'">
             <div class="cat-emoji">🍗</div>
-            <span>TẤT CẢ</span>
+            <span th:text="#{menu.all}">TẤT CẢ</span>
         </a>
         <a th:each="c : ${categories}"
            th:href="@{/menu(category=${c.id}, q=${q})}"
@@ -75,11 +41,11 @@
 <section class="delivery-search-section">
     <div class="container">
         <div class="delivery-toggle">
-            <button type="button" class="btn-delivery active">GIAO HÀNG TẬN NƠI</button>
-            <button type="button" class="btn-pickup">ĐẶT ĐẾN LẤY</button>
+            <button type="button" class="btn-delivery active" th:text="#{menu.delivery}">GIAO HÀNG TẬN NƠI</button>
+            <button type="button" class="btn-pickup" th:text="#{menu.pickup}">ĐẶT ĐẾN LẤY</button>
         </div>
         <form th:action="@{/menu}" method="get" class="search-box">
-            <input type="text" name="q" th:value="${q}" placeholder="Nhập tên món ăn...">
+            <input type="text" name="q" th:value="${q}" th:placeholder="#{menu.search.placeholder}">
             <input type="hidden" name="category"
                    th:if="${selectedCategory != null}"
                    th:value="${selectedCategory}">
@@ -109,15 +75,15 @@
                     <input type="hidden" name="q" th:value="${q}">
                     <input type="hidden" name="category" th:value="${selectedCategory}">
                     <input type="hidden" name="page" th:value="${products.number}">
-                    <button type="submit" class="btn-order">THÊM VÀO GIỎ</button>
+                    <button type="submit" class="btn-order" th:text="#{menu.add}">THÊM VÀO GIỎ</button>
                 </form>
-                <a th:unless="${currentUser != null}" th:href="@{/login}" class="btn-order">ĐĂNG NHẬP ĐỂ ĐẶT</a>            </div>
+                <a th:unless="${currentUser != null}" th:href="@{/login}" class="btn-order" th:text="#{menu.loginToOrder}" >ĐĂNG NHẬP ĐỂ ĐẶT</a>            </div>
         </div>
     </div>
 
     <!-- Thông báo không có kết quả -->
     <div class="empty-state" th:if="${#lists.isEmpty(products.content)}">
-        <p>Không tìm thấy món ăn phù hợp. Vui lòng thử từ khóa hoặc danh mục khác!</p>
+        <p th:text="#{menu.empty}">Không tìm thấy món ăn phù hợp. Vui lòng thử từ khóa hoặc danh mục khác!</p>
     </div>
 
     <!-- Phân trang -->
@@ -134,7 +100,7 @@
 <!-- Giỏ hàng nổi -->
 <a th:if="${currentUser != null}" th:href="@{/cart}" class="floating-cart">
     <span>🛒</span>
-    <span data-cart-count th:text="${cartCount} + ' món'">0 món</span>
+    <span data-cart-count th:text="#{cart.itemCount(${cartCount})}">0 món</span>
     <span>·</span>
     <span data-cart-total th:text="${#numbers.formatDecimal(cartTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</span>
 </a>

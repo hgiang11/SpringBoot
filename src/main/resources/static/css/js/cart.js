@@ -4,14 +4,19 @@
     // Đánh dấu JavaScript đang chạy, để CSS ẩn nút "Cập nhật"
     document.documentElement.classList.add('js');
 
-    // Spring Security yêu cầu token CSRF trong mọi request POST/PUT/DELETE
     const token = document.querySelector('meta[name="_csrf"]')?.content;
     const headerName = document.querySelector('meta[name="_csrf_header"]')?.content;
+
+    // Câu chữ đã được server dịch sẵn theo ngôn ngữ đang chọn (nằm trong thẻ meta)
+    const t = {
+        error: document.querySelector('meta[name="i18n-error"]')?.content || 'Error',
+        qtyRange: document.querySelector('meta[name="i18n-qty-range"]')?.content || 'Invalid quantity'
+    };
 
     function toast(message, isError) {
         const el = document.createElement('div');
         el.className = 'js-toast' + (isError ? ' error' : '');
-        el.textContent = message;               // textContent: không chèn HTML, tránh lỗ hổng XSS
+        el.textContent = message;
         document.body.appendChild(el);
         requestAnimationFrame(() => el.classList.add('show'));
         setTimeout(() => {
@@ -31,21 +36,21 @@
             body: body === undefined ? undefined : JSON.stringify(body)
         });
 
-        if (res.redirected) {                   // chưa đăng nhập hoặc phiên hết hạn: về trang đăng nhập
+        if (res.redirected) {
             window.location.href = res.url;
             return null;
         }
         const isJson = (res.headers.get('content-type') || '').includes('application/json');
         const data = isJson ? await res.json() : {};
         if (!res.ok) {
-            throw new Error(data.message || 'Có lỗi xảy ra, vui lòng thử lại');
+            throw new Error(data.message || t.error);
         }
         return data;
     }
 
     function updateSummary(data) {
         document.querySelectorAll('[data-cart-count]').forEach(el => {
-            el.textContent = data.cartCount + ' món';
+            el.textContent = data.cartLabel;
         });
         document.querySelectorAll('[data-cart-total]').forEach(el => {
             el.textContent = data.cartTotal;
@@ -55,7 +60,7 @@
     // ===== Trang menu: thêm món vào giỏ =====
     document.querySelectorAll('form.js-add-to-cart').forEach(form => {
         form.addEventListener('submit', async (e) => {
-            e.preventDefault();                 // chặn việc gửi form kiểu cũ (tải lại trang)
+            e.preventDefault();
             const button = form.querySelector('button[type="submit"]');
             button.disabled = true;
             try {
@@ -76,24 +81,24 @@
     // ===== Trang giỏ hàng: số lượng tự cập nhật khi thay đổi =====
     document.querySelectorAll('form.js-qty-form').forEach(form => {
         const input = form.querySelector('input[name="quantity"]');
-        let lastValid = Number(input.value);    // số lượng hợp lệ gần nhất, dùng để khôi phục khi lỗi
+        let lastValid = Number(input.value);
         let timer = null;
         let requestId = 0;
 
         async function save() {
-            if (input.value === '') return;     // đang xóa để gõ số mới: chưa gửi
+            if (input.value === '') return;
             const quantity = Number(input.value);
             if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
-                toast('Số lượng phải từ 1 đến 20', true);
+                toast(t.qtyRange, true);
                 input.value = lastValid;
                 return;
             }
-            if (quantity === lastValid) return; // không đổi thì khỏi gửi
+            if (quantity === lastValid) return;
 
             const myId = ++requestId;
             try {
                 const data = await api(form.dataset.url, 'PUT', { quantity: quantity });
-                if (data && myId === requestId) {   // bỏ qua phản hồi cũ nếu đã có lần gửi mới hơn
+                if (data && myId === requestId) {
                     lastValid = quantity;
                     form.closest('tr').querySelector('.js-subtotal').textContent = data.itemSubtotal;
                     updateSummary(data);
@@ -104,18 +109,15 @@
             }
         }
 
-        // Mỗi lần số đổi (bấm mũi tên hoặc gõ), đợi 0,5 giây không đổi nữa mới gửi
         input.addEventListener('input', () => {
             clearTimeout(timer);
             timer = setTimeout(save, 500);
         });
 
-        // Rời khỏi ô mà còn trống thì trả về số cũ
         input.addEventListener('blur', () => {
             if (input.value === '') input.value = lastValid;
         });
 
-        // Nhấn Enter cũng gửi ngay
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             clearTimeout(timer);
@@ -135,7 +137,7 @@
                     updateSummary(data);
                     toast(data.message, false);
                     if (document.querySelectorAll('tbody tr').length === 0) {
-                        window.location.reload();   // hết món: tải lại để hiện "Giỏ hàng trống"
+                        window.location.reload();
                     }
                 }
             } catch (err) {

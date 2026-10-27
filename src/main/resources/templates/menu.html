@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/menu.css}">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script th:src="@{/js/cart.js}" defer></script>
 </head>
 
 <body class="jollibee-bg">
@@ -100,7 +103,8 @@
                 <p class="product-desc" th:text="${p.description}">Mô tả món ăn...</p>
                 <div class="product-price"
                      th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">80,000 ₫</div>
-                <form th:if="${currentUser != null}" th:action="@{/cart/add}" method="post">
+                <form th:if="${currentUser != null}" th:action="@{/cart/add}" method="post"
+                      class="js-add-to-cart" th:attr="data-url=@{/api/cart/add}">
                     <input type="hidden" name="productId" th:value="${p.id}">
                     <input type="hidden" name="q" th:value="${q}">
                     <input type="hidden" name="category" th:value="${selectedCategory}">
@@ -128,10 +132,11 @@
 </main>
 
 <!-- Giỏ hàng nổi -->
-<a th:href="@{/cart}" class="floating-cart">
+<a th:if="${currentUser != null}" th:href="@{/cart}" class="floating-cart">
     <span>🛒</span>
-    <span th:text="${cartCount}">0</span>
-    <span th:text="${#numbers.formatDecimal(cartTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</span>
+    <span data-cart-count th:text="${cartCount} + ' món'">0 món</span>
+    <span>·</span>
+    <span data-cart-total th:text="${#numbers.formatDecimal(cartTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</span>
 </a>
 
 <!-- 5. FOOTER -->

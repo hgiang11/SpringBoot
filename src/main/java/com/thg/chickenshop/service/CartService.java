@@ -115,4 +115,11 @@ public class CartService {
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy món trong giỏ hàng"));
     }
+
+    @Transactional(readOnly = true)
+    public BigDecimal getItemSubtotal(User user, Long itemId) {
+        Cart cart = cartRepository.findByUser(user)
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy giỏ hàng"));
+        return findItem(cart, itemId).getSubtotal();
+    }
 }

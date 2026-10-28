@@ -43,12 +43,12 @@ public class CartService {
     @Transactional
     public void addItem(User user, Long productId, int quantity) {
         if (quantity < 1) {
-            throw new BusinessException("Số lượng phải từ 1 trở lên");
+            throw new BusinessException("cart.qtyMin");
         }
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy món ăn"));
+                .orElseThrow(() -> new NotFoundException("product.notFound"));
         if (!product.isAvailable()) {
-            throw new BusinessException("Món này hiện không còn bán");
+            throw new BusinessException("product.unavailable");
         }
 
         Cart cart = getOrCreateCart(user);
@@ -60,12 +60,12 @@ public class CartService {
         if (existing != null) {                       // đã có trong giỏ: cộng dồn
             int newQty = existing.getQuantity() + quantity;
             if (newQty > MAX_QUANTITY) {
-                throw new BusinessException("Mỗi món tối đa " + MAX_QUANTITY + " phần trong giỏ");
+                throw new BusinessException("cart.maxPerItem", MAX_QUANTITY);
             }
             existing.setQuantity(newQty);
         } else {                                      // chưa có: thêm dòng mới
             if (quantity > MAX_QUANTITY) {
-                throw new BusinessException("Mỗi món tối đa " + MAX_QUANTITY + " phần trong giỏ");
+                throw new BusinessException("cart.maxPerItem", MAX_QUANTITY);
             }
             cart.getItems().add(new CartItem(cart, product, quantity));
         }
@@ -74,7 +74,7 @@ public class CartService {
     @Transactional
     public CartUpdateResult updateQuantity(User user, Long itemId, int quantity) {
         if (quantity < 1 || quantity > MAX_QUANTITY) {
-            throw new BusinessException("Số lượng phải từ 1 đến " + MAX_QUANTITY);
+            throw new BusinessException("cart.qtyRange", MAX_QUANTITY);
         }
         Cart cart = getOrCreateCart(user);
         CartItem item = findItem(cart, itemId);
@@ -113,13 +113,13 @@ public class CartService {
         return cart.getItems().stream()
                 .filter(i -> i.getId().equals(itemId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy món trong giỏ hàng"));
+                .orElseThrow(() -> new NotFoundException("cart.itemNotFound"));
     }
 
     @Transactional(readOnly = true)
     public BigDecimal getItemSubtotal(User user, Long itemId) {
         Cart cart = cartRepository.findByUser(user)
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy giỏ hàng"));
+                .orElseThrow(() -> new NotFoundException("cart.notFound"));
         return findItem(cart, itemId).getSubtotal();
     }
 }

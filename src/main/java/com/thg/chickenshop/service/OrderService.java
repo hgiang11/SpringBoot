@@ -6,6 +6,7 @@ import com.thg.chickenshop.exception.NotFoundException;
 import com.thg.chickenshop.model.*;
 import com.thg.chickenshop.repository.CartRepository;
 import com.thg.chickenshop.repository.OrderRepository;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,8 +48,8 @@ public class OrderService {
         for (CartItem ci : cart.getItems()) {
             Product p = ci.getProduct();
             if (!p.isAvailable()) {
-                throw new BusinessException("Món \"" + p.getName()
-                        + "\" hiện không còn bán, vui lòng xóa khỏi giỏ hàng");
+                String name = p.localizedName(LocaleContextHolder.getLocale().getLanguage());
+                throw new BusinessException("order.productUnavailable", name);
             }
             // chốt giá tại thời điểm đặt: đổi giá món sau này không ảnh hưởng đơn cũ
             OrderItem oi = new OrderItem(p, ci.getQuantity(), p.getPrice());

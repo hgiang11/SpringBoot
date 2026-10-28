@@ -19,12 +19,12 @@ public class DataInitializer implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;       // thêm field
+    private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(CategoryRepository categoryRepository,
                            ProductRepository productRepository,
                            UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {      // thêm tham số
+                           PasswordEncoder passwordEncoder) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
@@ -35,7 +35,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         seedUsers();
         seedMenu();
-        seedEnglishNames();      // MỚI
+        seedEnglishNames();
     }
 
     private void seedEnglishNames() {

@@ -52,6 +52,8 @@ public class ProductService {
         form.setId(p.getId());
         form.setName(p.getName());
         form.setDescription(p.getDescription());
+        form.setNameEn(p.getNameEn());
+        form.setDescriptionEn(p.getDescriptionEn());
         form.setPrice(p.getPrice());
         form.setImageUrl(p.getImageUrl());
         form.setCategoryId(p.getCategory().getId());
@@ -64,6 +66,8 @@ public class ProductService {
         Product p = (form.getId() == null) ? new Product() : findById(form.getId());
         p.setName(form.getName().trim());
         p.setDescription(form.getDescription());
+        p.setNameEn(form.getNameEn() == null ? null : form.getNameEn().trim());
+        p.setDescriptionEn(form.getDescriptionEn());
         p.setPrice(form.getPrice());
         p.setAvailable(form.isAvailable());
         p.setCategory(categoryService.findById(form.getCategoryId()));

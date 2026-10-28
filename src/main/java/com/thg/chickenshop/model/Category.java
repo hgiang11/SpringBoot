@@ -26,4 +26,12 @@ public class Category {
     public Category(String name) {
         this.name = name;
     }
+
+    @Column(length = 50)
+    private String nameEn;
+
+    public String localizedName(String lang) {
+        return "en".equals(lang) && nameEn != null && !nameEn.isBlank() ? nameEn : name;
+    }
+
 }

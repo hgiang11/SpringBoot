@@ -19,6 +19,12 @@ public class ProductForm {
     @Size(max = 100, message = "Tên món tối đa 100 ký tự")
     private String name;
 
+    @Size(max = 100, message = "Tên tiếng Anh tối đa 100 ký tự")
+    private String nameEn;
+
+    @Size(max = 1000, message = "Mô tả tiếng Anh tối đa 1000 ký tự")
+    private String descriptionEn;
+
     @Size(max = 1000, message = "Mô tả tối đa 1000 ký tự")
     private String description;
 

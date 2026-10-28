@@ -41,4 +41,19 @@ public class Product {
         this.imageUrl = imageUrl;
         this.category = category;
     }
+    @Column(length = 100)
+    private String nameEn;
+
+    @Column(length = 1000)
+    private String descriptionEn;
+
+    // Trả về tên theo ngôn ngữ; chưa có tên tiếng Anh thì dùng tên tiếng Việt
+    public String localizedName(String lang) {
+        return "en".equals(lang) && nameEn != null && !nameEn.isBlank() ? nameEn : name;
+    }
+
+    public String localizedDescription(String lang) {
+        return "en".equals(lang) && descriptionEn != null && !descriptionEn.isBlank() ? descriptionEn : description;
+    }
+
 }

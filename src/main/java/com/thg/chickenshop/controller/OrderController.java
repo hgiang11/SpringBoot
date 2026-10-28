@@ -7,6 +7,7 @@ import com.thg.chickenshop.model.Order;
 import com.thg.chickenshop.model.User;
 import com.thg.chickenshop.service.CartService;
 import com.thg.chickenshop.service.CurrentUserService;
+import com.thg.chickenshop.service.MessageService;
 import com.thg.chickenshop.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -21,13 +22,16 @@ public class OrderController {
     private final OrderService orderService;
     private final CartService cartService;
     private final CurrentUserService currentUserService;
+    private final MessageService messageService;
 
     public OrderController(OrderService orderService,
                            CartService cartService,
-                           CurrentUserService currentUserService) {
+                           CurrentUserService currentUserService,
+                           MessageService messageService) {
         this.orderService = orderService;
         this.cartService = cartService;
         this.currentUserService = currentUserService;
+        this.messageService = messageService;
     }
 
     @GetMapping("/checkout")
@@ -35,12 +39,12 @@ public class OrderController {
         User user = currentUserService.getCurrentUser();
         Cart cart = cartService.getOrCreateCart(user);
         if (cart.getItems().isEmpty()) {
-            ra.addFlashAttribute("error", "Giỏ hàng trống, hãy chọn món trước");
+            ra.addFlashAttribute("error", messageService.get("checkout.emptyCart"));
             return "redirect:/cart";
         }
 
         CheckoutForm form = new CheckoutForm();
-        form.setDeliveryAddress(user.getAddress());   // điền sẵn từ hồ sơ, khách có thể sửa
+        form.setDeliveryAddress(user.getAddress());
         form.setPhone(user.getPhone());
 
         model.addAttribute("checkoutForm", form);
@@ -64,10 +68,11 @@ public class OrderController {
 
         try {
             Order order = orderService.placeOrder(user, form);
-            ra.addFlashAttribute("message", "Đặt hàng thành công! Mã đơn #" + order.getId());
+            ra.addFlashAttribute("message",
+                    messageService.get("order.placed", String.valueOf(order.getId())));
             return "redirect:/orders/" + order.getId();
         } catch (BusinessException ex) {
-            ra.addFlashAttribute("error", ex.getMessage());
+            ra.addFlashAttribute("error", messageService.get(ex.getMessage(), ex.getArgs()));
             return "redirect:/cart";
         }
     }
@@ -92,9 +97,9 @@ public class OrderController {
     public String cancel(@PathVariable Long id, RedirectAttributes ra) {
         try {
             orderService.cancel(id, currentUserService.getCurrentUser());
-            ra.addFlashAttribute("message", "Đã hủy đơn hàng #" + id);
+            ra.addFlashAttribute("message", messageService.get("order.cancelled", String.valueOf(id)));
         } catch (BusinessException ex) {
-            ra.addFlashAttribute("error", ex.getMessage());
+            ra.addFlashAttribute("error", messageService.get(ex.getMessage(), ex.getArgs()));
         }
         return "redirect:/orders/" + id;
     }

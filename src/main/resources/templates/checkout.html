@@ -14,44 +14,45 @@
 
 
 <main class="cart-main">
-    <h1>Xác nhận đơn hàng</h1>
+    <h1 th:text="#{checkout.title}">Xác nhận đơn hàng</h1>
 
     <div class="checkout-grid">
 
         <form th:action="@{/orders}" th:object="${checkoutForm}" method="post" class="checkout-form">
-            <h2>Thông tin giao hàng</h2>
+            <h2 th:text="#{checkout.shipping}">Thông tin giao hàng</h2>
 
             <div class="field">
-                <label for="deliveryAddress">Địa chỉ giao hàng *</label>
+                <label for="deliveryAddress" th:text="#{checkout.address}">Địa chỉ giao hàng *</label>
                 <input type="text" id="deliveryAddress" th:field="*{deliveryAddress}">
                 <span class="error" th:if="${#fields.hasErrors('deliveryAddress')}"
                       th:errors="*{deliveryAddress}"></span>
             </div>
 
             <div class="field">
-                <label for="phone">Số điện thoại *</label>
+                <label for="phone" th:text="#{checkout.phone}">Số điện thoại *</label>
                 <input type="text" id="phone" th:field="*{phone}">
                 <span class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
             </div>
 
-            <p class="pay-note">Hình thức thanh toán: <strong>Thanh toán khi nhận hàng (COD)</strong></p>
+            <p class="pay-note"><span th:text="#{checkout.payment}">Hình thức thanh toán:</span>
+                <strong th:text="#{checkout.cod}">Thanh toán khi nhận hàng (COD)</strong></p>
 
             <div class="cart-actions">
-                <a th:href="@{/cart}" class="btn-continue">Quay lại giỏ hàng</a>
-                <button type="submit" class="btn-checkout">ĐẶT HÀNG</button>
+                <a th:href="@{/cart}" class="btn-continue" th:text="#{checkout.back}">Quay lại giỏ hàng</a>
+                <button type="submit" class="btn-checkout" th:text="#{checkout.place}">ĐẶT HÀNG</button>
             </div>
         </form>
 
         <aside class="order-summary">
-            <h2>Đơn của bạn</h2>
+            <h2 th:text="#{checkout.summary}">Đơn của bạn</h2>
             <ul>
                 <li th:each="item : ${cart.items}">
-                    <span th:text="${item.quantity} + ' x ' + ${item.product.name}">2 x Gà rán</span>
+                    <span th:text="${item.quantity} + ' x ' + ${item.product.localizedName(#locale.language)}">2 x Gà rán</span>
                     <span th:text="${#numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">70.000 ₫</span>
                 </li>
             </ul>
             <div class="summary-total">
-                Tổng cộng:
+                <span th:text="#{order.total}">Tổng cộng:</span>
                 <strong th:text="${#numbers.formatDecimal(cart.total, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</strong>
             </div>
         </aside>

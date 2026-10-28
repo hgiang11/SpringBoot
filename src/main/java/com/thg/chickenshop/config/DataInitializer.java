@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -34,6 +35,42 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         seedUsers();
         seedMenu();
+        seedEnglishNames();      // MỚI
+    }
+
+    private void seedEnglishNames() {
+        Map<String, String> categories = Map.of(
+                "Gà rán", "Fried Chicken",
+                "Burger", "Burgers",
+                "Món ăn kèm", "Sides",
+                "Nước uống", "Drinks");
+        categoryRepository.findAll().forEach(c -> {
+            String en = categories.get(c.getName());
+            if (c.getNameEn() == null && en != null) {
+                c.setNameEn(en);
+                categoryRepository.save(c);
+            }
+        });
+
+        Map<String, String[]> products = Map.ofEntries(
+                Map.entry("Gà rán 1 miếng", new String[]{"Fried Chicken (1 piece)", "Crispy chicken with spicy sauce"}),
+                Map.entry("Gà rán 2 miếng", new String[]{"Fried Chicken (2 pieces)", "Combo of 2 crispy chicken pieces"}),
+                Map.entry("Gà sốt mật ong", new String[]{"Honey Glazed Chicken", "Chicken coated in sweet honey sauce"}),
+                Map.entry("Burger gà", new String[]{"Chicken Burger", "Crispy chicken burger with fresh vegetables"}),
+                Map.entry("Burger bò", new String[]{"Beef Burger", "Grilled beef burger with cheese"}),
+                Map.entry("Khoai tây chiên", new String[]{"French Fries", "Medium portion, golden and crispy"}),
+                Map.entry("Salad bắp cải", new String[]{"Cabbage Salad", "Fresh side salad"}),
+                Map.entry("Pepsi", new String[]{"Pepsi", "330ml can"}),
+                Map.entry("Trà đào", new String[]{"Peach Tea", "Large cup with plenty of peaches"}),
+                Map.entry("Combo 2 người", new String[]{"Combo for 2", "2 chicken pieces, 1 fries, 2 drinks"}));
+        productRepository.findAll().forEach(p -> {
+            String[] en = products.get(p.getName());
+            if (p.getNameEn() == null && en != null) {
+                p.setNameEn(en[0]);
+                p.setDescriptionEn(en[1]);
+                productRepository.save(p);
+            }
+        });
     }
 
     private void seedUsers() {

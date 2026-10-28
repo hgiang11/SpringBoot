@@ -32,9 +32,9 @@ public class OrderService {
     @Transactional
     public Order placeOrder(User user, CheckoutForm form) {
         Cart cart = cartRepository.findByUser(user)
-                .orElseThrow(() -> new BusinessException("Giỏ hàng trống"));
+                .orElseThrow(() -> new BusinessException("checkout.emptyCart"));
         if (cart.getItems().isEmpty()) {
-            throw new BusinessException("Giỏ hàng trống");
+            throw new BusinessException("checkout.emptyCart");
         }
 
         Order order = new Order();
@@ -70,9 +70,9 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Order findByIdForUser(Long id, User user) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy đơn hàng"));
+                .orElseThrow(() -> new NotFoundException("order.notFound"));
         if (!order.getUser().getId().equals(user.getId())) {
-            throw new NotFoundException("Không tìm thấy đơn hàng");
+            throw new NotFoundException("order.notFound");
         }
         return order;
     }
@@ -81,8 +81,7 @@ public class OrderService {
     public void cancel(Long id, User user) {
         Order order = findByIdForUser(id, user);
         if (order.getStatus() != OrderStatus.PENDING) {
-            throw new BusinessException("Chỉ hủy được đơn đang chờ xác nhận");
-        }
+            throw new BusinessException("order.cancelOnlyPending"); }
         order.setStatus(OrderStatus.CANCELLED);
     }
 
@@ -99,7 +98,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Order findById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy đơn hàng"));
+                .orElseThrow(() -> new NotFoundException("order.notFound"));
     }
 
     @Transactional

@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Có lỗi xảy ra - Chicken Shop</title>
+    <title th:text="#{error.title} + ' - ' + #{brand.name}">Có lỗi xảy ra</title>
     <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
 <main class="admin-main" style="text-align:center; padding-top:60px;">
-    <h1 th:text="${status} ?: 'Lỗi'">404</h1>
-    <p th:text="${message} ?: 'Đã có lỗi xảy ra. Vui lòng thử lại.'">Thông báo lỗi</p>
-    <a th:href="@{/menu}" class="btn btn-primary">Về trang thực đơn</a>
+    <h1 th:text="${status} ?: 'Error'">404</h1>
+    <p th:text="${message} ?: #{error.title}">Thông báo lỗi</p>
+    <a th:href="@{/menu}" class="btn btn-primary" th:text="#{error.backToMenu}">Về trang thực đơn</a>
 </main>
 </body>
 </html>

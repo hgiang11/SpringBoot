@@ -13,23 +13,23 @@
 <header th:replace="~{fragments/header :: header(${active})}"></header>
 
 <main class="cart-main">
-    <h1>Đơn hàng của tôi</h1>
+    <h1 th:text="#{order.myOrders}">Đơn hàng của tôi</h1>
 
     <div class="toast" th:if="${message}" th:text="${message}"></div>
     <div class="toast toast-error" th:if="${error}" th:text="${error}"></div>
 
     <div class="cart-empty" th:if="${#lists.isEmpty(orders)}">
-        <p>Bạn chưa có đơn hàng nào.</p>
-        <a th:href="@{/menu}" class="btn-continue">Xem thực đơn</a>
+        <p th:text="#{order.none}">Bạn chưa có đơn hàng nào.</p>
+        <a th:href="@{/menu}" class="btn-continue" th:text="#{cart.viewMenu}">Xem thực đơn</a>
     </div>
 
     <table class="cart-table" th:unless="${#lists.isEmpty(orders)}">
         <thead>
         <tr>
-            <th>Mã đơn</th>
-            <th>Ngày đặt</th>
-            <th>Tổng tiền</th>
-            <th>Trạng thái</th>
+            <th th:text="#{order.col.id}">Mã đơn</th>
+            <th th:text="#{order.col.date}">Ngày đặt</th>
+            <th th:text="#{order.col.total}">Tổng tiền</th>
+            <th th:text="#{order.col.status}">Trạng thái</th>
             <th></th>
         </tr>
         </thead>
@@ -39,12 +39,11 @@
             <td th:text="${#temporals.format(o.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
             <td th:text="${#numbers.formatDecimal(o.totalPrice, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</td>
             <td><span class="status" th:classappend="'status-' + ${o.status}"
-                      th:text="${o.status.label}">Chờ xác nhận</span></td>
-            <td><a th:href="@{/orders/{id}(id=${o.id})}" class="btn-small">Xem</a></td>
+                      th:text="#{${'order.status.' + o.status.name()}}">Chờ xác nhận</span></td>
+            <td><a th:href="@{/orders/{id}(id=${o.id})}" class="btn-small" th:text="#{order.view}">Xem</a></td>
         </tr>
         </tbody>
     </table>
 </main>
-
 </body>
 </html>

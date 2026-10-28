@@ -41,7 +41,7 @@
             <tbody>
             <tr th:each="item : ${cart.items}">
                 <td>
-                    <strong th:text="${item.product.name}">Tên món</strong>
+                    <strong th:text="${item.product.localizedName(#locale.language)}">Tên món</strong>
                     <span class="unavailable" th:unless="${item.product.available}"
                           th:text="#{cart.unavailable}">Món đã ngừng bán</span>
                 </td>

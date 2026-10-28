@@ -9,11 +9,11 @@ import lombok.Setter;
 @Getter @Setter
 public class CheckoutForm {
 
-    @NotBlank(message = "Vui lòng nhập địa chỉ giao hàng")
-    @Size(max = 255, message = "Địa chỉ tối đa 255 ký tự")
+    @NotBlank(message = "{validation.address.required}")
+    @Size(max = 255, message = "{validation.address.size}")
     private String deliveryAddress;
 
-    @NotBlank(message = "Vui lòng nhập số điện thoại")
-    @Pattern(regexp = "^(0|\\+84)\\d{9}$", message = "Số điện thoại không hợp lệ (ví dụ 0912345678)")
+    @NotBlank(message = "{validation.phone.required}")
+    @Pattern(regexp = "^(0|\\+84)\\d{9}$", message = "{validation.phone.pattern}")
     private String phone;
 }

@@ -32,7 +32,7 @@
            class="cat-item"
            th:classappend="${selectedCategory != null and selectedCategory == c.id} ? 'active'">
             <div class="cat-emoji">🍔</div>
-            <span th:text="${#strings.toUpperCase(c.name)}">DANH MỤC</span>
+            <span th:text="${#strings.toUpperCase(c.localizedName(#locale.language))}">DANH MỤC</span>
         </a>
     </div>
 </section>
@@ -61,12 +61,12 @@
     <div class="product-grid">
         <div class="product-card" th:each="p : ${products.content}">
             <div class="product-img">
-                <img th:src="@{${p.imageUrl}}" th:alt="${p.name}"
+                <img th:src="@{${p.imageUrl}}" th:alt="${p.localizedName(#locale.language)}"
                      onerror="this.src='https://via.placeholder.com/300x200?text=Jollibee'">
             </div>
             <div class="product-info">
-                <h3 class="product-name" th:text="${#strings.toUpperCase(p.name)}">TÊN MÓN ĂN</h3>
-                <p class="product-desc" th:text="${p.description}">Mô tả món ăn...</p>
+                <h3 class="product-name" th:text="${#strings.toUpperCase(p.localizedName(#locale.language))}">TÊN MÓN ĂN</h3>
+                <p class="product-desc" th:text="${p.localizedDescription(#locale.language)}">Mô tả món ăn...</p>
                 <div class="product-price"
                      th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">80,000 ₫</div>
                 <form th:if="${currentUser != null}" th:action="@{/cart/add}" method="post"

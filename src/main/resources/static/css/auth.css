@@ -20,3 +20,5 @@ body { margin: 0; min-height: 100vh; background: #fce4e6; font-family: Arial, sa
 
 .toast { padding: 10px 14px; border-radius: 8px; background: #e6f6ea; color: #1d6b32; font-weight: 600; margin-bottom: 14px; }
 .toast-error { background: #fdeaea; color: #a01818; }
+.auth-lang { float: right; font-size: 0.85rem; }
+.auth-lang a { color: #d30b26; text-decoration: none; font-weight: 700; }

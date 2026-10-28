@@ -11,29 +11,35 @@
 <body class="jollibee-bg">
 
 <header th:replace="~{fragments/header :: header(${active})}"></header>
+
 <main class="cart-main">
-    <h1>Đơn hàng <span th:text="'#' + ${order.id}">#1</span></h1>
+    <h1><span th:text="#{order.detailTitle}">Đơn hàng</span> <span th:text="'#' + ${order.id}">#1</span></h1>
 
     <div class="toast" th:if="${message}" th:text="${message}"></div>
     <div class="toast toast-error" th:if="${error}" th:text="${error}"></div>
 
     <div class="info-box">
-        <p><strong>Trạng thái:</strong>
+        <p><strong th:text="#{order.status}">Trạng thái:</strong>
             <span class="status" th:classappend="'status-' + ${order.status}"
-                  th:text="${order.status.label}">Chờ xác nhận</span></p>
-        <p><strong>Ngày đặt:</strong>
+                  th:text="#{${'order.status.' + order.status.name()}}">Chờ xác nhận</span></p>
+        <p><strong th:text="#{order.date}">Ngày đặt:</strong>
             <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2026</span></p>
-        <p><strong>Địa chỉ giao hàng:</strong> <span th:text="${order.deliveryAddress}">...</span></p>
-        <p><strong>Số điện thoại:</strong> <span th:text="${order.phone}">...</span></p>
+        <p><strong th:text="#{order.address}">Địa chỉ giao hàng:</strong> <span th:text="${order.deliveryAddress}">...</span></p>
+        <p><strong th:text="#{order.phone}">Số điện thoại:</strong> <span th:text="${order.phone}">...</span></p>
     </div>
 
     <table class="cart-table">
         <thead>
-        <tr><th>Món</th><th>Đơn giá lúc đặt</th><th>Số lượng</th><th>Thành tiền</th></tr>
+        <tr>
+            <th th:text="#{order.col.item}">Món</th>
+            <th th:text="#{order.col.priceAtOrder}">Đơn giá lúc đặt</th>
+            <th th:text="#{order.col.qty}">Số lượng</th>
+            <th th:text="#{order.col.subtotal}">Thành tiền</th>
+        </tr>
         </thead>
         <tbody>
         <tr th:each="item : ${order.items}">
-            <td th:text="${item.product.name}">Tên món</td>
+            <td th:text="${item.product.localizedName(#locale.language)}">Tên món</td>
             <td th:text="${#numbers.formatDecimal(item.priceAtOrder, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</td>
             <td th:text="${item.quantity}">1</td>
             <td th:text="${#numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</td>
@@ -43,19 +49,19 @@
 
     <div class="cart-summary">
         <div class="cart-total">
-            Tổng cộng:
+            <span th:text="#{order.total}">Tổng cộng:</span>
             <strong th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</strong>
         </div>
         <div class="cart-actions">
-            <a th:href="@{/orders}" class="btn-continue">Về danh sách đơn</a>
+            <a th:href="@{/orders}" class="btn-continue" th:text="#{order.backToList}">Về danh sách đơn</a>
             <form th:if="${order.status.name() == 'PENDING'}"
                   th:action="@{/orders/{id}/cancel(id=${order.id})}" method="post"
-                  onsubmit="return confirm('Bạn chắc chắn muốn hủy đơn này?');">
-                <button type="submit" class="btn-small btn-remove">Hủy đơn</button>
+                  th:attr="data-confirm=#{order.cancelConfirm}"
+                  onsubmit="return confirm(this.dataset.confirm);">
+                <button type="submit" class="btn-small btn-remove" th:text="#{order.cancel}">Hủy đơn</button>
             </form>
         </div>
     </div>
 </main>
-
 </body>
 </html>

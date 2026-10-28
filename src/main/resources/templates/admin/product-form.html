@@ -49,6 +49,16 @@
 
         <div class="field">
             <label for="description">Mô tả</label>
+            <div class="field">
+                <label for="nameEn">Tên món (tiếng Anh)</label>
+                <input type="text" id="nameEn" th:field="*{nameEn}">
+                <span class="error" th:if="${#fields.hasErrors('nameEn')}" th:errors="*{nameEn}"></span>
+            </div>
+
+            <div class="field">
+                <label for="descriptionEn">Mô tả (tiếng Anh)</label>
+                <textarea id="descriptionEn" th:field="*{descriptionEn}" rows="3"></textarea>
+            </div>
             <textarea id="description" th:field="*{description}" rows="4"></textarea>
             <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
         </div>

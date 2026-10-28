@@ -54,7 +54,7 @@
         </thead>
         <tbody>
         <tr th:each="item : ${order.items}">
-            <td th:text="${item.product.name}">Tên món</td>
+            <td th:text="${item.product.localizedName(#locale.language)}">Tên món</td>
             <td th:text="${#numbers.formatDecimal(item.priceAtOrder, 0, 'POINT', 0, 'COMMA')} + ' đ'">0 đ</td>
             <td th:text="${item.quantity}">1</td>
             <td th:text="${#numbers.formatDecimal(item.subtotal, 0, 'POINT', 0, 'COMMA')} + ' đ'">0 đ</td>

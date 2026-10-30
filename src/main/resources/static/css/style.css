@@ -56,7 +56,7 @@ img {
 /* 1.1 TOP BAR MÀU VÀNG TRÊN CÙNG */
 .top-bar {
     background-color: var(--jollibee-yellow);
-    height: 38px;
+    height: 28px;
     width: 100%;
     display: flex;
     align-items: center;

@@ -15,6 +15,7 @@
         <a th:href="@{/admin/products}">Món ăn</a>
         <a th:href="@{/admin/categories}">Danh mục</a>
         <a th:href="@{/admin/orders}">Đơn hàng</a>
+        <a th:href="@{/admin/dashboard}">Thống kê</a>
         <a th:href="@{/menu}">Xem trang khách</a>
     </nav>
 </header>
@@ -56,7 +57,7 @@
                       th:text="${o.status.label}">Chờ xác nhận</span></td>
             <td><a th:href="@{/admin/orders/{id}(id=${o.id})}" class="btn btn-small">Chi tiết</a></td>
         </tr>
-        <tr th:if="${orders.empty}">
+        <tr th:if="${orders.content.isEmpty()}" class="empty-box">
             <td colspan="6" class="empty">Không có đơn hàng nào.</td>
         </tr>
         </tbody>

@@ -14,6 +14,7 @@
         <a th:href="@{/admin/products}">Món ăn</a>
         <a th:href="@{/admin/categories}">Danh mục</a>
         <a th:href="@{/admin/orders}">Đơn hàng</a>
+        <a th:href="@{/admin/dashboard}">Thống kê</a>
         <a th:href="@{/menu}">Xem trang khách</a>
     </nav>
 </header>
@@ -48,19 +49,20 @@
         </div>
 
         <div class="field">
-            <label for="description">Mô tả</label>
-            <div class="field">
-                <label for="nameEn">Tên món (tiếng Anh)</label>
-                <input type="text" id="nameEn" th:field="*{nameEn}">
-                <span class="error" th:if="${#fields.hasErrors('nameEn')}" th:errors="*{nameEn}"></span>
-            </div>
-
-            <div class="field">
-                <label for="descriptionEn">Mô tả (tiếng Anh)</label>
-                <textarea id="descriptionEn" th:field="*{descriptionEn}" rows="3"></textarea>
-            </div>
+            <label for="description">Mô tả (Tiếng Việt)</label>
             <textarea id="description" th:field="*{description}" rows="4"></textarea>
             <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+        </div>
+
+        <div class="field">
+            <label for="nameEn">Tên món (Tiếng Anh)</label>
+            <input type="text" id="nameEn" th:field="*{nameEn}">
+            <span class="error" th:if="${#fields.hasErrors('nameEn')}" th:errors="*{nameEn}"></span>
+        </div>
+
+        <div class="field">
+            <label for="descriptionEn">Mô tả (Tiếng Anh)</label>
+            <textarea id="descriptionEn" th:field="*{descriptionEn}" rows="3"></textarea>
         </div>
 
         <div class="field">
@@ -76,7 +78,7 @@
 
         <div class="field-check">
             <input type="checkbox" id="available" th:field="*{available}">
-            <label for="available">Đang bán</label>
+            <label for="available">Đang bán sản phẩm này</label>
         </div>
 
         <div class="form-actions">

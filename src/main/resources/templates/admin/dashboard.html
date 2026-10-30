@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thống kê - Chicken Shop</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<header class="admin-bar">
+    <a th:href="@{/admin/products}" class="admin-logo">🍗 Chicken Shop · Quản trị</a>
+    <nav>
+        <a th:href="@{/admin/dashboard}">Thống kê</a>
+        <a th:href="@{/admin/products}">Món ăn</a>
+        <a th:href="@{/admin/categories}">Danh mục</a>
+        <a th:href="@{/admin/orders}">Đơn hàng</a>
+        <a th:href="@{/menu}">Xem trang khách</a>
+    </nav>
+</header>
+
+<main class="admin-main">
+    <div class="admin-title">
+        <h1>Thống kê</h1>
+    </div>
+
+    <div class="dash-toolbar">
+        <label for="period">Khoảng thời gian:</label>
+        <select id="period">
+            <option value="MONTH" selected>Tháng này</option>
+            <option value="TODAY">Hôm nay</option>
+        </select>
+    </div>
+
+    <!-- 6 thẻ số liệu -->
+    <section class="dash-cards">
+        <div class="dash-card"><div class="label">Doanh thu</div><div class="value" id="c-revenue">-</div></div>
+        <div class="dash-card"><div class="label">Tổng đơn</div><div class="value" id="c-total">-</div></div>
+        <div class="dash-card"><div class="label">Đơn hoàn thành</div><div class="value" id="c-completed">-</div></div>
+        <div class="dash-card"><div class="label">Đơn huỷ</div><div class="value" id="c-cancelled">-</div></div>
+        <div class="dash-card"><div class="label">Tỷ lệ huỷ</div><div class="value" id="c-rate">-</div></div>
+        <div class="dash-card"><div class="label">Giá trị đơn trung bình</div><div class="value" id="c-avg">-</div></div>
+    </section>
+
+    <!-- 4 biểu đồ -->
+    <section class="dash-grid">
+        <div class="dash-box">
+            <h3>Doanh thu 7 ngày gần nhất</h3>
+            <div class="dash-chart"><canvas id="ch-days"></canvas></div>
+            <div class="dash-error" id="e-days"></div>
+        </div>
+        <div class="dash-box">
+            <h3>Giờ cao điểm (số đơn)</h3>
+            <div class="dash-chart"><canvas id="ch-hours"></canvas></div>
+            <div class="dash-error" id="e-hours"></div>
+        </div>
+        <div class="dash-box">
+            <h3>Doanh thu theo danh mục</h3>
+            <div class="dash-chart"><canvas id="ch-cat"></canvas></div>
+            <div class="dash-error" id="e-cat"></div>
+        </div>
+        <div class="dash-box">
+            <h3>Doanh thu theo thanh toán</h3>
+            <div class="dash-chart"><canvas id="ch-pay"></canvas></div>
+            <div class="dash-error" id="e-pay"></div>
+        </div>
+    </section>
+
+    <!-- 3 bảng -->
+    <section class="dash-grid">
+        <div class="dash-box">
+            <h3>Top sản phẩm bán chạy</h3>
+            <table class="admin-table">
+                <thead><tr><th>Sản phẩm</th><th>Số lượng</th><th>Doanh thu</th></tr></thead>
+                <tbody id="t-products"></tbody>
+            </table>
+        </div>
+        <div class="dash-box">
+            <h3>Top khách hàng</h3>
+            <table class="admin-table">
+                <thead><tr><th>Khách hàng</th><th>SĐT</th><th>Số đơn</th><th>Chi tiêu</th></tr></thead>
+                <tbody id="t-customers"></tbody>
+            </table>
+        </div>
+        <div class="dash-box">
+            <h3>Sắp hết hàng</h3>
+            <table class="admin-table">
+                <thead><tr><th>Món</th><th>Tồn kho</th></tr></thead>
+                <tbody id="t-stock"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    const BASE = '/admin/api/stats';
+    const charts = {};
+
+    const money = n => Number(n || 0).toLocaleString('vi-VN') + ' đ';
+
+    async function getJson(url) {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' - ' + url);
+        return res.json();
+    }
+
+    // Mỗi khối chạy riêng: một link lỗi không làm hỏng cả trang
+    async function safe(errId, fn) {
+        const box = errId ? document.getElementById(errId) : null;
+        if (box) box.textContent = '';
+        try { await fn(); }
+        catch (e) {
+            console.error(e);
+            if (box) box.textContent = 'Không tải được dữ liệu.';
+        }
+    }
+
+    function drawChart(key, canvasId, config) {
+        if (charts[key]) charts[key].destroy();
+        charts[key] = new Chart(document.getElementById(canvasId), config);
+    }
+
+    function fillTable(tbodyId, rows, cols, cellsFn) {
+        const tbody = document.getElementById(tbodyId);
+        tbody.replaceChildren();
+        if (!rows.length) {
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.colSpan = cols;
+            td.className = 'empty';
+            td.textContent = 'Chưa có dữ liệu.';
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            return;
+        }
+        rows.forEach(r => {
+            const tr = document.createElement('tr');
+            cellsFn(r).forEach(cell => {
+                const td = document.createElement('td');
+                if (cell instanceof Node) td.appendChild(cell);
+                else td.textContent = cell;
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+    }
+
+    async function loadAll() {
+        const period = document.getElementById('period').value;
+
+        await Promise.all([
+            safe(null, async () => {
+                const s = await getJson(BASE + '/summary?period=' + period);
+                document.getElementById('c-revenue').textContent = money(s.revenue);
+                document.getElementById('c-total').textContent = s.totalOrders;
+                document.getElementById('c-completed').textContent = s.completedOrders;
+                document.getElementById('c-cancelled').textContent = s.cancelledOrders;
+                // Giả định cancellationRate là số phần trăm (vd 25.0 = 25%)
+                document.getElementById('c-rate').textContent = Number(s.cancellationRate).toFixed(1) + '%';
+                document.getElementById('c-avg').textContent = money(s.averageOrderValue);
+            }),
+
+            safe('e-days', async () => {
+                const d = await getJson(BASE + '/revenue-by-day?days=7');
+                drawChart('days', 'ch-days', {
+                    type: 'bar',
+                    data: {
+                        labels: d.map(x => x.date),
+                        datasets: [{ label: 'Doanh thu', data: d.map(x => x.revenue), backgroundColor: '#e67e22' }]
+                    },
+                    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }),
+
+            safe('e-hours', async () => {
+                const d = await getJson(BASE + '/peak-hours?period=' + period);
+                drawChart('hours', 'ch-hours', {
+                    type: 'bar',
+                    data: {
+                        labels: d.map(x => x.hour + 'h'),
+                        datasets: [{ label: 'Số đơn', data: d.map(x => x.orders), backgroundColor: '#3498db' }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                    }
+                });
+            }),
+
+            safe('e-cat', async () => {
+                const d = await getJson(BASE + '/categories?period=' + period);
+                drawChart('cat', 'ch-cat', pieConfig(d));
+            }),
+
+            safe('e-pay', async () => {
+                const d = await getJson(BASE + '/payments?period=' + period);
+                drawChart('pay', 'ch-pay', pieConfig(d));
+            }),
+
+            safe(null, async () => {
+                const d = await getJson(BASE + '/top-products?period=' + period + '&limit=5');
+                fillTable('t-products', d, 3, p => {
+                    const wrap = document.createElement('span');
+                    if (p.imageUrl) {
+                        const img = document.createElement('img');
+                        img.src = p.imageUrl;
+                        img.alt = '';
+                        img.className = 'dash-thumb';
+                        wrap.appendChild(img);
+                    }
+                    wrap.appendChild(document.createTextNode(p.name));
+                    return [wrap, p.quantity, money(p.revenue)];
+                });
+            }),
+
+            safe(null, async () => {
+                const d = await getJson(BASE + '/top-customers?period=' + period + '&limit=5');
+                fillTable('t-customers', d, 4, c => [c.fullName, c.phone, c.orders, money(c.spent)]);
+            }),
+
+            safe(null, async () => {
+                const d = await getJson(BASE + '/low-stock?threshold=10');
+                fillTable('t-stock', d, 2, p => [p.name, p.stock]);
+            })
+        ]);
+    }
+
+    function pieConfig(rows) {
+        const colors = ['#e67e22', '#3498db', '#2ecc71', '#9b59b6', '#e74c3c', '#f1c40f', '#1abc9c'];
+        return {
+            type: 'doughnut',
+            data: {
+                labels: rows.map(x => x.label),
+                datasets: [{ data: rows.map(x => x.value), backgroundColor: colors }]
+            },
+            options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        };
+    }
+
+    document.getElementById('period').addEventListener('change', loadAll);
+    loadAll();
+</script>
+</body>
+</html>

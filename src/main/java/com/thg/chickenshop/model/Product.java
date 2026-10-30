@@ -47,6 +47,9 @@ public class Product {
     @Column(length = 1000)
     private String descriptionEn;
 
+    @Column(columnDefinition = "int not null default 100")
+    private int stock = 100;
+
     // Trả về tên theo ngôn ngữ; chưa có tên tiếng Anh thì dùng tên tiếng Việt
     public String localizedName(String lang) {
         return "en".equals(lang) && nameEn != null && !nameEn.isBlank() ? nameEn : name;

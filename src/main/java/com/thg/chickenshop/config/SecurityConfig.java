@@ -24,7 +24,8 @@ public class SecurityConfig {
                         // Công khai: trang giới thiệu, menu, đăng nhập/đăng ký, file tĩnh, trang lỗi
                         .requestMatchers("/", "/home", "/menu", "/jollibee",
                                 "/login", "/register", "/error",
-                                "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
+                                "/css/**", "/js/**", "/images/**", "/uploads/**",
+                                "/actuator/health" ).permitAll()
                         // Chỉ ADMIN
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         // Còn lại (giỏ hàng, thanh toán, đơn hàng...) phải đăng nhập

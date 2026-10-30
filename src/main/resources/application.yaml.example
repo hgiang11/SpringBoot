@@ -22,3 +22,11 @@ spring:
         basename: messages
         encoding: UTF-8
         fallback-to-system-locale: false
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

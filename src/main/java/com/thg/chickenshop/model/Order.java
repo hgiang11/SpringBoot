@@ -35,6 +35,10 @@ public class Order {
     private String deliveryAddress;
     private String phone;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method", length = 20, columnDefinition = "varchar(20) default 'COD'")
+    private PaymentMethod paymentMethod = PaymentMethod.COD;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 

@@ -1,4 +1,5 @@
 # Chicken Shop – Website đặt gà rán online
+# Dự án học tập , không thương mai
 
 Dự án cuối môn Spring Boot. Khách xem thực đơn, thêm giỏ hàng (AJAX), đặt hàng thanh toán khi nhận; admin quản lý món, danh mục, đơn hàng và xem dashboard thống kê.
 

@@ -29,6 +29,16 @@
     <div class="info-box">
         <p><strong>Khách hàng:</strong> <span th:text="${order.user.fullName}">Khách</span></p>
         <p><strong>Số điện thoại:</strong> <span th:text="${order.phone}">...</span></p>
+        <p><strong>Người nhận:</strong>
+            <span th:text="${order.receiverName != null ? order.receiverName : order.user.fullName}">...</span></p>
+        <p><strong>Thanh toán:</strong>
+        <p th:if="${order.distanceKm != null}"><strong>Khoảng cách:</strong>
+            <span th:text="${#numbers.formatDecimal(order.distanceKm, 1, 1)} + ' km'">5,2 km</span></p>
+        <p th:if="${order.shippingFee != null and order.shippingFee.signum() > 0}"><strong>Phí giao hàng:</strong>
+            <span th:text="${#numbers.formatDecimal(order.shippingFee, 0, 'POINT', 0, 'COMMA')} + ' đ'">0 đ</span></p>
+        <p th:if="${order.estimatedDeliveryTime != null}"><strong>Dự kiến giao:</strong>
+            <span th:text="${#temporals.format(order.estimatedDeliveryTime, 'HH:mm dd/MM/yyyy')}">19:45</span></p>
+            <span th:text="${order.paymentMethod != null ? order.paymentMethod.label : 'Tiền mặt khi nhận hàng'}">...</span></p>
         <p><strong>Địa chỉ giao hàng:</strong> <span th:text="${order.deliveryAddress}">...</span></p>
         <p><strong>Ngày đặt:</strong>
             <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2026</span></p>
@@ -43,7 +53,7 @@
                 <input type="hidden" name="status" th:value="${next}">
                 <button type="submit" class="btn btn-small"
                         th:classappend="${next.name() == 'CANCELLED'} ? '' : 'btn-primary'"
-                        th:text="'Chuyển sang: ' + ${next.label}">Chuyển</button>
+                        th:text=" ${next.label}">Chuyển</button>
             </form>
         </div>
         <p th:if="${#lists.isEmpty(order.status.nextStatuses())}">Đơn đã ở trạng thái cuối.</p>

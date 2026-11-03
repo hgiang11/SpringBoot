@@ -4,50 +4,55 @@
 body {
     margin: 0;
     font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
-    background: #0f172a; /* Nền tối nhẹ sang trọng cho toàn app hoặc chuyển sang #f8fafc nếu thích nền sáng */
     background: #f1f5f9;
     color: #1e293b;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
 }
 
-/* --- THANH ĐIỀU HƯỚNG ADMIN (HEADER HIỆN ĐẠI) --- */
+/* --- THANH ĐIỀU HƯỚNG ADMIN (SIDEBAR BÊN TRÁI) --- */
 .admin-bar {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    padding: 0 40px;
-    height: 72px;
+    padding: 24px 20px;
+    width: 260px;
+    height: 100vh;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e2e8f0;
-    position: sticky;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    border-right: 1px solid #e2e8f0;
+    position: fixed;
     top: 0;
+    left: 0;
     z-index: 1000;
-    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+    box-shadow: 4px 0 20px -2px rgba(0, 0, 0, 0.03);
 }
 .admin-logo {
     color: #0f172a;
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-decoration: none;
     letter-spacing: -0.5px;
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 30px;
+    padding: 0 4px;
 }
 .admin-bar nav {
     display: flex;
+    flex-direction: column;
     gap: 6px;
     background: #f1f5f9;
-    padding: 4px;
+    padding: 6px;
     border-radius: 12px;
     border: 1px solid #e2e8f0;
 }
 .admin-bar nav a {
     color: #64748b;
-    padding: 8px 16px;
+    padding: 12px 16px;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.88rem;
@@ -58,16 +63,13 @@ body {
     color: #0f172a;
     background: #ffffff;
 }
-/* Nếu trang nào dùng active cho menu hoặc muốn mặc định tab đầu nổi bật */
-.admin-bar nav a:nth-child(1) {
-    /* Có thể tuỳ biến nếu cần */
-}
 
-/* --- KHUNG NỘI DUNG CHÍNH (ĐƯỢC ĐÓNG GÓP THÀNH CARD LỚN) --- */
+/* --- KHUNG NỘI DUNG CHÍNH --- */
 .admin-main {
     max-width: 1150px;
-    margin: 36px auto;
-    padding: 0 24px;
+    margin: 0 auto;
+    padding: 36px 24px;
+    margin-left: 260px;
 }
 
 /* --- TIÊU ĐỀ TRANG --- */
@@ -176,7 +178,7 @@ body {
     box-shadow: 0 0 0 4px rgba(227, 24, 55, 0.08);
 }
 
-/* --- BẢNG DỮ LIỆU CAO CẤP (TABLE CONTAINER) --- */
+/* --- BẢNG DỮ LIỆU CAO CẤP --- */
 .admin-table {
     width: 100%;
     border-collapse: separate;
@@ -191,6 +193,7 @@ body {
     padding: 18px 24px;
     border-bottom: 1px solid #f1f5f9;
     text-align: left;
+    vertical-align: middle;
 }
 .admin-table th {
     background: #f8fafc;
@@ -227,6 +230,7 @@ body {
     align-items: center;
     gap: 6px;
     letter-spacing: 0.3px;
+    white-space: nowrap;
 }
 .badge.on {
     background: #dcfce7;
@@ -268,7 +272,31 @@ body {
     box-shadow: 0 4px 12px rgba(227, 24, 55, 0.3);
 }
 
-/* --- FORM NHẬP LIỆU HIỆN ĐẠI --- */
+/* --- FORM NHẬP THÊM TRONG BẢNG (RESTOCK FORM) --- */
+.restock-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.restock-form input[type=number] {
+    width: 65px;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    outline: none;
+    background: #f8fafc;
+    color: #0f172a;
+    transition: all 0.2s;
+}
+.restock-form input[type=number]:focus {
+    background: #fff;
+    border-color: #E31837;
+    box-shadow: 0 0 0 3px rgba(227, 24, 55, 0.08);
+}
+
+/* --- FORM NHẬP LIỆU CHUNG (DÙNG CHO TRANG THÊM/SỬA) --- */
 .admin-form {
     background: #fff;
     padding: 40px;

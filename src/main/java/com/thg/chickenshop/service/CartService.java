@@ -57,16 +57,19 @@ public class CartService {
                 .findFirst()
                 .orElse(null);
 
-        if (existing != null) {                       // đã có trong giỏ: cộng dồn
-            int newQty = existing.getQuantity() + quantity;
-            if (newQty > MAX_QUANTITY) {
-                throw new BusinessException("cart.maxPerItem", MAX_QUANTITY);
-            }
+        int currentQty = (existing != null) ? existing.getQuantity() : 0;
+        int newQty = currentQty + quantity;
+
+        if (newQty > MAX_QUANTITY) {
+            throw new BusinessException("cart.maxPerItem", MAX_QUANTITY);
+        }
+        if (newQty > product.getStock()) {                      // [MỚI]
+            throw new BusinessException("cart.notEnoughStock", product.getStock());
+        }
+
+        if (existing != null) {
             existing.setQuantity(newQty);
-        } else {                                      // chưa có: thêm dòng mới
-            if (quantity > MAX_QUANTITY) {
-                throw new BusinessException("cart.maxPerItem", MAX_QUANTITY);
-            }
+        } else {
             cart.getItems().add(new CartItem(cart, product, quantity));
         }
     }
@@ -78,6 +81,10 @@ public class CartService {
         }
         Cart cart = getOrCreateCart(user);
         CartItem item = findItem(cart, itemId);
+        int stock = item.getProduct().getStock();               // [MỚI]
+        if (quantity > stock) {
+            throw new BusinessException("cart.notEnoughStock", stock);
+        }
         item.setQuantity(quantity);
         return new CartUpdateResult(itemId, item.getSubtotal(), cart.getTotal(), sumQuantity(cart));
     }

@@ -22,10 +22,26 @@
             <h2 th:text="#{checkout.shipping}">Thông tin giao hàng</h2>
 
             <div class="field">
+                <label for="receiverName" th:text="#{checkout.receiverName}">Tên người nhận *</label>
+                <input type="text" id="receiverName" th:field="*{receiverName}">
+                <span class="error" th:if="${#fields.hasErrors('receiverName')}"
+                      th:errors="*{receiverName}"></span>
+            </div>
+
+            <div class="field">
                 <label for="deliveryAddress" th:text="#{checkout.address}">Địa chỉ giao hàng *</label>
                 <input type="text" id="deliveryAddress" th:field="*{deliveryAddress}">
+                <input type="hidden" id="deliveryLat" name="deliveryLat">
+                <input type="hidden" id="deliveryLng" name="deliveryLng">
                 <span class="error" th:if="${#fields.hasErrors('deliveryAddress')}"
                       th:errors="*{deliveryAddress}"></span>
+            </div>
+
+            <div class="field" th:if="${googleMapsKey != null and !googleMapsKey.isBlank()}">
+                <label th:text="#{checkout.mapSearch}">Tìm địa chỉ trên bản đồ</label>
+                <div id="place-search"></div>
+                <div id="map" class="checkout-map" style="height:260px"></div>
+                <small th:text="#{checkout.mapHint}">Chọn địa chỉ gợi ý để lấy vị trí chính xác</small>
             </div>
 
             <div class="field">
@@ -34,8 +50,29 @@
                 <span class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
             </div>
 
-            <p class="pay-note"><span th:text="#{checkout.payment}">Hình thức thanh toán:</span>
-                <strong th:text="#{checkout.cod}">Thanh toán khi nhận hàng (COD)</strong></p>
+            <div class="field pay-methods">
+                <label th:text="#{checkout.payment}">Hình thức thanh toán:</label>
+                <label class="pay-option">
+                    <input type="radio" th:field="*{paymentMethod}" value="COD">
+                    <span th:text="#{checkout.cod}">Thanh toán khi nhận hàng (COD)</span>
+                </label>
+                <label class="pay-option">
+                    <input type="radio" th:field="*{paymentMethod}" value="BANK_QR">
+                    <span th:text="#{checkout.pay.qr}">Chuyển khoản ngân hàng (QR)</span>
+                </label>
+                <label class="pay-option">
+                    <input type="radio" th:field="*{paymentMethod}" value="E_WALLET">
+                    <span th:text="#{checkout.pay.wallet}">Ví điện tử</span>
+                </label>
+                <span class="error" th:if="${#fields.hasErrors('paymentMethod')}"
+                      th:errors="*{paymentMethod}"></span>
+            </div>
+
+            <div class="field">
+                <button type="button" id="btn-quote" class="btn-continue" th:text="#{checkout.quoteBtn}">Tính phí ship &amp; thời gian giao</button>
+                <div id="quote-box" class="quote-box" hidden
+                     th:attr="data-template=#{checkout.quoteTemplate},data-subtotal=${cart.total}"></div>
+            </div>
 
             <div class="cart-actions">
                 <a th:href="@{/cart}" class="btn-continue" th:text="#{checkout.back}">Quay lại giỏ hàng</a>
@@ -55,10 +92,83 @@
                 <span th:text="#{order.total}">Tổng cộng:</span>
                 <strong th:text="${#numbers.formatDecimal(cart.total, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</strong>
             </div>
+            <div class="summary-total" id="ship-row" hidden>
+                <span th:text="#{order.shippingFee}">Phí giao hàng:</span>
+                <strong id="ship-fee">0 ₫</strong>
+            </div>
+            <div class="summary-total" id="grand-row" hidden>
+                <span th:text="#{order.grandTotal}">Thanh toán:</span>
+                <strong id="grand-total">0 ₫</strong>
+            </div>
         </aside>
 
     </div>
 </main>
+
+<script th:if="${googleMapsKey != null and !googleMapsKey.isBlank()}">
+    async function initMap() {
+        const { Map } = await google.maps.importLibrary('maps');
+        await google.maps.importLibrary('places');
+        const map = new Map(document.getElementById('map'),
+            { center: { lat: 21.0285, lng: 105.8542 }, zoom: 14 });
+        const marker = new google.maps.Marker({ map: map });
+
+        const ac = new google.maps.places.PlaceAutocompleteElement({ includedRegionCodes: ['vn'] });
+        document.getElementById('place-search').appendChild(ac);
+
+        ac.addEventListener('gmp-select', async ({ placePrediction }) => {
+            const place = placePrediction.toPlace();
+            await place.fetchFields({ fields: ['formattedAddress', 'location'] });
+            document.getElementById('deliveryAddress').value = place.formattedAddress;
+            document.getElementById('deliveryLat').value = place.location.lat();
+            document.getElementById('deliveryLng').value = place.location.lng();
+            map.setCenter(place.location);
+            marker.setPosition(place.location);
+        });
+    }
+</script>
+<script th:if="${googleMapsKey != null and !googleMapsKey.isBlank()}"
+        th:src="|https://maps.googleapis.com/maps/api/js?key=${googleMapsKey}&loading=async&callback=initMap|"
+        async></script>
+
+<script>
+    async function requestQuote() {
+        const box = document.getElementById('quote-box');
+        box.hidden = false;
+        const lat = document.getElementById('deliveryLat').value;
+        const lng = document.getElementById('deliveryLng').value;
+        const params = new URLSearchParams();
+        if (lat && lng) { params.set('lat', lat); params.set('lng', lng); }
+        params.set('address', document.getElementById('deliveryAddress').value);
+        try {
+            const res = await fetch('/api/delivery/estimate?' + params.toString());
+            if (!res.ok) { throw new Error('HTTP ' + res.status); }
+            const q = await res.json();
+            const fee = Number(q.shippingFee);
+            const total = Number(box.dataset.subtotal) + fee;
+            const time = new Date(q.eta).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            box.textContent = box.dataset.template
+                .replace('{km}', q.distanceKm.toFixed(1))
+                .replace('{fee}', fee.toLocaleString('vi-VN') + ' ₫')
+                .replace('{total}', total.toLocaleString('vi-VN') + ' ₫')
+                .replace('{time}', time)
+                .replace('{min}', q.totalMinutes);
+            document.getElementById('ship-fee').textContent = fee.toLocaleString('vi-VN') + ' ₫';
+            document.getElementById('grand-total').textContent = total.toLocaleString('vi-VN') + ' ₫';
+            document.getElementById('ship-row').hidden = false;
+            document.getElementById('grand-row').hidden = false;
+        } catch (e) {
+            console.error(e);
+            box.textContent = '—';
+        }
+    }
+    document.getElementById('btn-quote').addEventListener('click', requestQuote);
+    document.getElementById('deliveryAddress').addEventListener('input', function () {
+        document.getElementById('quote-box').hidden = true;
+        document.getElementById('ship-row').hidden = true;
+        document.getElementById('grand-row').hidden = true;
+    });
+</script>
 
 </body>
 </html>

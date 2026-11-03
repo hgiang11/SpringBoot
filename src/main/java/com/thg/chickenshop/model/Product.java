@@ -59,4 +59,20 @@ public class Product {
         return "en".equals(lang) && descriptionEn != null && !descriptionEn.isBlank() ? descriptionEn : description;
     }
 
+    public void decreaseStock(int qty) {
+        this.stock -= qty;
+        if (this.stock <= 0) {
+            this.stock = 0;
+            this.available = false;      // hết hàng thì tự ẩn khỏi khách
+        }
+    }
+
+    public void increaseStock(int qty) {
+        boolean wasSoldOut = this.stock <= 0;
+        this.stock += qty;
+        if (wasSoldOut && this.stock > 0) {
+            this.available = true;       // có hàng lại thì tự hiện
+        }
+    }
+
 }

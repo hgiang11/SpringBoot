@@ -2,6 +2,8 @@
    0. BIẾN MÀU & RESET
    (giữ tên biến của code đầu, thêm alias cho tên biến của code thứ 2)
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+
 :root {
     --jollibee-red: #E31837;
     --jollibee-red-dark: #A80D25;

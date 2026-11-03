@@ -1,6 +1,7 @@
 package com.thg.chickenshop.service;
 
 import com.thg.chickenshop.dto.CheckoutForm;
+import com.thg.chickenshop.dto.DeliveryQuote;
 import com.thg.chickenshop.exception.BusinessException;
 import com.thg.chickenshop.exception.NotFoundException;
 import com.thg.chickenshop.model.*;
@@ -30,8 +31,14 @@ public class OrderService {
 
     // ===== Dành cho khách =====
 
+    // [MỚI] Giữ nguyên chữ ký cũ để test và code cũ vẫn gọi được
     @Transactional
     public Order placeOrder(User user, CheckoutForm form) {
+        return placeOrder(user, form, null);
+    }
+
+    @Transactional
+    public Order placeOrder(User user, CheckoutForm form, DeliveryQuote quote) {   // [ĐỔI] thêm tham số quote
         Cart cart = cartRepository.findByUser(user)
                 .orElseThrow(() -> new BusinessException("checkout.emptyCart"));
         if (cart.getItems().isEmpty()) {
@@ -42,7 +49,23 @@ public class OrderService {
         order.setUser(user);
         order.setDeliveryAddress(form.getDeliveryAddress().trim());
         order.setPhone(form.getPhone().trim());
+        // [MỚI] Tên người nhận; nếu form không gửi thì lấy tên tài khoản (giữ tương thích test cũ)
+        String receiver = form.getReceiverName();
+        order.setReceiverName(receiver != null && !receiver.isBlank() ? receiver.trim() : user.getFullName());
+        // [MỚI] Hình thức thanh toán, mặc định COD
+        order.setPaymentMethod(form.getPaymentMethod() != null ? form.getPaymentMethod() : PaymentMethod.COD);
         order.setStatus(OrderStatus.PENDING);
+
+        // [MỚI] Kết quả tính phí do server tính, không lấy từ trình duyệt
+        if (quote != null) {
+            order.setDistanceKm(quote.distanceKm());
+            order.setShippingFee(quote.shippingFee());
+            order.setEstimatedMinutes(quote.totalMinutes());
+            order.setEstimatedDeliveryTime(quote.eta());
+            order.setDeliveryLat(form.getDeliveryLat());
+            order.setDeliveryLng(form.getDeliveryLng());
+        }
+
 
         BigDecimal total = BigDecimal.ZERO;
         for (CartItem ci : cart.getItems()) {
@@ -51,7 +74,13 @@ public class OrderService {
                 String name = p.localizedName(LocaleContextHolder.getLocale().getLanguage());
                 throw new BusinessException("order.productUnavailable", name);
             }
-            // chốt giá tại thời điểm đặt: đổi giá món sau này không ảnh hưởng đơn cũ
+            // [MỚI] kiểm tra và trừ kho
+            if (p.getStock() < ci.getQuantity()) {
+                throw new BusinessException("order.outOfStock",
+                        p.localizedName(LocaleContextHolder.getLocale().getLanguage()));
+            }
+            p.decreaseStock(ci.getQuantity());
+
             OrderItem oi = new OrderItem(p, ci.getQuantity(), p.getPrice());
             order.addItem(oi);
             total = total.add(oi.getSubtotal());
@@ -82,8 +111,10 @@ public class OrderService {
     public void cancel(Long id, User user) {
         Order order = findByIdForUser(id, user);
         if (order.getStatus() != OrderStatus.PENDING) {
-            throw new BusinessException("order.cancelOnlyPending"); }
+            throw new BusinessException("order.cancelOnlyPending");
+        }
         order.setStatus(OrderStatus.CANCELLED);
+        restoreStock(order);   // [MỚI]
     }
 
     // ===== Dành cho admin =====
@@ -111,5 +142,13 @@ public class OrderService {
         }
         order.setStatus(next);
         return order;
+    }
+
+    // [MỚI] Trả hàng về kho khi đơn bị hủy
+    private void restoreStock(Order order) {
+        for (OrderItem oi : order.getItems()) {
+            Product p = oi.getProduct();
+            p.setStock(p.getStock() + oi.getQuantity());
+        }
     }
 }

@@ -80,4 +80,13 @@ public class AdminProductController {
                 (p.isAvailable() ? "Đã hiện món: " : "Đã ẩn món: ") + p.getName());
         return "redirect:/admin/products";
     }
+
+    @PostMapping("/{id}/restock")
+    public String restock(@PathVariable Long id,
+                          @RequestParam int quantity,
+                          RedirectAttributes ra) {
+        productService.addStock(id, quantity);
+        ra.addFlashAttribute("message", "Đã nhập thêm " + quantity + " vào kho");
+        return "redirect:/admin/products";
+    }
 }

@@ -8,6 +8,7 @@
 </head>
 <body>
 
+<!-- SIDEBAR BÊN TRÁI -->
 <header class="admin-bar">
     <a th:href="@{/admin/products}" class="admin-logo">🍗 Chicken Shop · Quản trị</a>
     <nav>
@@ -40,6 +41,8 @@
             <th>Tên món</th>
             <th>Danh mục</th>
             <th>Giá</th>
+            <th>TỒN KHO</th>
+            <th>NHẬP THÊM</th>
             <th>Trạng thái</th>
             <th>Thao tác</th>
         </tr>
@@ -50,6 +53,13 @@
             <td th:text="${p.name}">Tên món</td>
             <td th:text="${p.category.name}">Danh mục</td>
             <td th:text="${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'COMMA')} + ' đ'">35.000 đ</td>
+            <td th:text="${p.stock}">0</td>
+            <td>
+                <form th:action="@{/admin/products/{id}/restock(id=${p.id})}" method="post" class="restock-form">
+                    <input type="number" name="quantity" min="1" placeholder="SL" required>
+                    <button type="submit" class="btn btn-small">Nhập</button>
+                </form>
+            </td>
             <td>
                 <span th:if="${p.available}" class="badge on">Đang bán</span>
                 <span th:unless="${p.available}" class="badge off">Đã ẩn</span>
@@ -63,7 +73,7 @@
             </td>
         </tr>
         <tr th:if="${products.content.isEmpty()}" class="empty-box">
-            <td colspan="6" class="empty">Không có món nào.</td>
+            <td colspan="8" class="empty">Không có món nào.</td>
         </tr>
         </tbody>
     </table>

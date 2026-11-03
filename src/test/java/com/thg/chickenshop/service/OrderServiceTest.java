@@ -1,6 +1,7 @@
 package com.thg.chickenshop.service;
 
 import com.thg.chickenshop.dto.CheckoutForm;
+import com.thg.chickenshop.dto.DeliveryQuote;
 import com.thg.chickenshop.exception.BusinessException;
 import com.thg.chickenshop.exception.NotFoundException;
 import com.thg.chickenshop.model.*;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -217,5 +219,26 @@ class OrderServiceTest {
                 .isInstanceOf(BusinessException.class);
 
         assertThat(order.getStatus()).isEqualTo(OrderStatus.PENDING);
+    }
+
+    @Test
+    @DisplayName("[MỚI] Lưu km, phí ship, giờ giao dự kiến từ báo giá; tổng thanh toán = tiền hàng + phí")
+    void placeOrder_withQuote_savesDeliveryInfo() {
+        User user = user(1L);
+        Cart cart = new Cart(user);
+        cart.getItems().add(new CartItem(cart, product(1L, "Ga ran", "35000", true), 2));
+        when(cartRepository.findByUser(user)).thenReturn(Optional.of(cart));
+        when(orderRepository.save(any(Order.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        DeliveryQuote quote = new DeliveryQuote(5.2, new BigDecimal("35000"), 40,
+                LocalDateTime.of(2026, 11, 2, 19, 45));
+
+        Order order = orderService.placeOrder(user, checkoutForm(), quote);
+
+        assertThat(order.getDistanceKm()).isEqualTo(5.2);
+        assertThat(order.getShippingFee()).isEqualByComparingTo("35000");
+        assertThat(order.getEstimatedMinutes()).isEqualTo(40);
+        assertThat(order.getTotalPrice()).isEqualByComparingTo("70000");
+        assertThat(order.getGrandTotal()).isEqualByComparingTo("105000");
     }
 }

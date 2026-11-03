@@ -97,8 +97,9 @@ public class DashboardService {
                 LocalDate first = today.withDayOfMonth(1);
                 yield new DateRange(first.atStartOfDay(), first.plusMonths(1).atStartOfDay());
             }
-        };
-    }
+            case ALL -> new DateRange(LocalDate.of(2000, 1, 1).atStartOfDay(),
+                    today.plusDays(1).atStartOfDay());
+        };    }
 
     static StatsSummary buildSummary(List<OrderPoint> points) {
         long total = points.size();

@@ -39,8 +39,29 @@ public class Order {
     @Column(name = "payment_method", length = 20, columnDefinition = "varchar(20) default 'COD'")
     private PaymentMethod paymentMethod = PaymentMethod.COD;
 
+    @Column(length = 100)
+    private String receiverName;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
+
+    private Double distanceKm;
+
+    @Column(precision = 12, scale = 0)
+    private BigDecimal shippingFee = BigDecimal.ZERO;
+
+    private Integer estimatedMinutes;
+
+    private LocalDateTime estimatedDeliveryTime;
+
+    // [MỚI] Tọa độ điểm giao
+    private Double deliveryLat;
+    private Double deliveryLng;
+
+    // Tổng khách phải trả = tiền hàng + phí giao. Không đổi totalPrice để dashboard và test cũ không lệch
+    public BigDecimal getGrandTotal() {
+        return totalPrice.add(shippingFee == null ? BigDecimal.ZERO : shippingFee);
+    }
 
     public void addItem(OrderItem item) {
         items.add(item);

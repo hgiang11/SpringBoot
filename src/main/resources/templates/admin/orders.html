@@ -30,6 +30,7 @@
         <a th:href="@{/admin/orders}" class="btn btn-small"
            th:classappend="${selectedStatus == null} ? 'btn-primary'">Tất cả</a>
         <a th:each="s : ${statuses}"
+           th:if="${s.name() != 'CONFIRMED'}"
            th:href="@{/admin/orders(status=${s})}"
            th:text="${s.label}"
            class="btn btn-small"

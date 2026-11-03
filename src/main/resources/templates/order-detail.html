@@ -26,6 +26,22 @@
             <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2026</span></p>
         <p><strong th:text="#{order.address}">Địa chỉ giao hàng:</strong> <span th:text="${order.deliveryAddress}">...</span></p>
         <p><strong th:text="#{order.phone}">Số điện thoại:</strong> <span th:text="${order.phone}">...</span></p>
+        <p><strong th:text="#{order.receiverName}">Người nhận:</strong>
+            <span th:text="${order.receiverName != null ? order.receiverName : order.user.fullName}">...</span></p>
+        <p><strong th:text="#{order.paymentMethod}">Thanh toán:</strong>
+        <p th:if="${order.estimatedDeliveryTime != null}">
+            <strong th:text="#{order.eta}">Dự kiến giao:</strong>
+            <span th:text="${#temporals.format(order.estimatedDeliveryTime, 'HH:mm dd/MM/yyyy')}">19:45</span>
+            (<span th:text="#{order.etaMinutes(${order.estimatedMinutes})}">khoảng 35 phút</span>)</p>
+        <p th:if="${order.distanceKm != null}">
+            <strong th:text="#{order.distance}">Khoảng cách:</strong>
+            <span th:text="${#numbers.formatDecimal(order.distanceKm, 1, 1)} + ' km'">5,2 km</span></p>
+        <p th:if="${order.shippingFee != null and order.shippingFee.signum() > 0}">
+            <strong th:text="#{order.shippingFee}">Phí giao hàng:</strong>
+            <span th:text="${#numbers.formatDecimal(order.shippingFee, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</span></p>
+            <span th:text="#{${'order.payment.' + (order.paymentMethod != null ? order.paymentMethod.name() : 'COD')}}">COD</span></p>
+        <p th:if="${order.paymentMethod != null and order.paymentMethod.name() == 'BANK_QR' and order.status.name() == 'PENDING'}"
+           th:text="#{order.bankInfo(${'' + order.id})}">Thông tin chuyển khoản</p>
     </div>
 
     <table class="cart-table">
@@ -48,9 +64,9 @@
     </table>
 
     <div class="cart-summary">
-        <div class="cart-total">
-            <span th:text="#{order.total}">Tổng cộng:</span>
-            <strong th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</strong>
+        <div class="cart-total" th:if="${order.shippingFee != null and order.shippingFee.signum() > 0}">
+            <span th:text="#{order.grandTotal}">Tổng thanh toán:</span>
+            <strong th:text="${#numbers.formatDecimal(order.grandTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</strong>
         </div>
         <div class="cart-actions">
             <a th:href="@{/orders}" class="btn-continue" th:text="#{order.backToList}">Về danh sách đơn</a>

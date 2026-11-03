@@ -1,14 +1,13 @@
 package com.thg.chickenshop.controller;
 
 import com.thg.chickenshop.dto.CheckoutForm;
+import com.thg.chickenshop.dto.DeliveryQuote;
+import com.thg.chickenshop.service.DeliveryQuoteService;
 import com.thg.chickenshop.exception.BusinessException;
 import com.thg.chickenshop.model.Cart;
 import com.thg.chickenshop.model.Order;
 import com.thg.chickenshop.model.User;
-import com.thg.chickenshop.service.CartService;
-import com.thg.chickenshop.service.CurrentUserService;
-import com.thg.chickenshop.service.MessageService;
-import com.thg.chickenshop.service.OrderService;
+import com.thg.chickenshop.service.*;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,15 +22,18 @@ public class OrderController {
     private final CartService cartService;
     private final CurrentUserService currentUserService;
     private final MessageService messageService;
+    private final DeliveryQuoteService deliveryQuoteService;
 
     public OrderController(OrderService orderService,
                            CartService cartService,
                            CurrentUserService currentUserService,
-                           MessageService messageService) {
+                           MessageService messageService,
+                           DeliveryQuoteService deliveryQuoteService)  {
         this.orderService = orderService;
         this.cartService = cartService;
         this.currentUserService = currentUserService;
         this.messageService = messageService;
+        this.deliveryQuoteService = deliveryQuoteService;
     }
 
     @GetMapping("/checkout")
@@ -46,6 +48,7 @@ public class OrderController {
         CheckoutForm form = new CheckoutForm();
         form.setDeliveryAddress(user.getAddress());
         form.setPhone(user.getPhone());
+        form.setReceiverName(user.getFullName());
 
         model.addAttribute("checkoutForm", form);
         model.addAttribute("cart", cart);
@@ -67,7 +70,9 @@ public class OrderController {
         }
 
         try {
-            Order order = orderService.placeOrder(user, form);
+            DeliveryQuote quote = deliveryQuoteService.quote(
+                    form.getDeliveryLat(), form.getDeliveryLng(), form.getDeliveryAddress());
+            Order order = orderService.placeOrder(user, form, quote);
             ra.addFlashAttribute("message",
                     messageService.get("order.placed", String.valueOf(order.getId())));
             return "redirect:/orders/" + order.getId();

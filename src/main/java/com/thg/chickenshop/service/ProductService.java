@@ -1,6 +1,7 @@
 package com.thg.chickenshop.service;
 
 import com.thg.chickenshop.dto.ProductForm;
+import com.thg.chickenshop.exception.BusinessException;
 import com.thg.chickenshop.exception.NotFoundException;
 import com.thg.chickenshop.model.Product;
 import com.thg.chickenshop.repository.ProductRepository;
@@ -84,5 +85,23 @@ public class ProductService {
         Product p = findById(id);
         p.setAvailable(!p.isAvailable());
         return p;      // không cần gọi save: Hibernate tự lưu thay đổi khi kết thúc giao dịch
+    }
+
+    @Transactional
+    public void addStock(Long id, int quantity) {
+        if (quantity <= 0) {
+            throw new BusinessException("Số lượng nhập phải lớn hơn 0");
+        }
+        Product p = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("product.notFound"));
+        p.increaseStock(quantity);
+    }
+
+    @Transactional
+    public void restock(Long id, int quantity) {
+        if (quantity <= 0) throw new BusinessException("Số lượng nhập phải lớn hơn 0");
+        Product p = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("product.notFound"));
+        p.setStock(p.getStock() + quantity);
     }
 }

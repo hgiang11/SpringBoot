@@ -30,6 +30,8 @@
         <select id="period">
             <option value="MONTH" selected>Tháng này</option>
             <option value="TODAY">Hôm nay</option>
+            <option value="WEEK">Tuần này</option>
+            <option value="ALL">Toàn bộ</option>
         </select>
     </div>
 
@@ -163,8 +165,8 @@
             }),
 
             safe('e-days', async () => {
-                const d = await getJson(BASE + '/revenue-by-day?days=7');
-                drawChart('days', 'ch-days', {
+                const days = { TODAY: 7, WEEK: 7, MONTH: 30, ALL: 30 }[period];
+                const d = await getJson(BASE + '/revenue-by-day?days=' + days);                drawChart('days', 'ch-days', {
                     type: 'bar',
                     data: {
                         labels: d.map(x => x.date),

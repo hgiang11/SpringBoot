@@ -102,4 +102,11 @@ class DashboardServiceTest {
         assertThat(hours.get(19).orders()).isEqualTo(1);
         assertThat(hours.get(3).orders()).isZero();
     }
+
+    @Test
+    void rangeOf_all_coversFromOldDateToEndOfToday() {
+        DateRange r = DashboardService.rangeOf(StatsPeriod.ALL, LocalDate.of(2026, 11, 2));
+        assertThat(r.from()).isEqualTo(LocalDateTime.of(2000, 1, 1, 0, 0));
+        assertThat(r.to()).isEqualTo(LocalDateTime.of(2026, 11, 3, 0, 0));
+    }
 }

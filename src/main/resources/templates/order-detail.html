@@ -39,7 +39,7 @@
         <p th:if="${order.shippingFee != null and order.shippingFee.signum() > 0}">
             <strong th:text="#{order.shippingFee}">Phí giao hàng:</strong>
             <span th:text="${#numbers.formatDecimal(order.shippingFee, 0, 'POINT', 0, 'COMMA')} + ' ₫'">0 ₫</span></p>
-            <span th:text="#{${'order.payment.' + (order.paymentMethod != null ? order.paymentMethod.name() : 'COD')}}">COD</span></p>
+        <span th:text="#{${'order.payment.' + (order.paymentMethod != null ? order.paymentMethod.name() : 'COD')}}">COD</span></p>
         <p th:if="${order.paymentMethod != null and order.paymentMethod.name() == 'BANK_QR' and order.status.name() == 'PENDING'}"
            th:text="#{order.bankInfo(${'' + order.id})}">Thông tin chuyển khoản</p>
     </div>
@@ -73,7 +73,8 @@
             <form th:if="${order.status.name() == 'PENDING'}"
                   th:action="@{/orders/{id}/cancel(id=${order.id})}" method="post"
                   th:attr="data-confirm=#{order.cancelConfirm}"
-                  onsubmit="return confirm(this.dataset.confirm);">
+                  onsubmit="return confirm(this.dataset.confirm);"
+                  style="display: inline; margin: 0;">
                 <button type="submit" class="btn-small btn-remove" th:text="#{order.cancel}">Hủy đơn</button>
             </form>
         </div>

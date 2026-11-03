@@ -26,3 +26,33 @@
 
 .toast { max-width: 1000px; margin: 0 auto 15px; padding: 10px 16px; border-radius: 8px; background: #e6f6ea; color: #1d6b32; font-weight: 600; }
 .toast-error { background: #fdeaea; color: #a01818; }
+
+/* --- CĂN CHỈNH KHUNG CHỨA NÚT HỦY ĐƠN & VỀ DANH SÁCH --- */
+.cart-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Đồng bộ nút Hủy đơn (.btn-remove) cho khớp chiều cao và kiểu dáng với nút bên cạnh */
+.cart-actions form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.cart-actions .btn-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    background: #fff;
+}
+
+.cart-actions .btn-remove:hover {
+    background: #fdeaea;
+}
